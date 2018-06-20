@@ -14,7 +14,7 @@ import com.example.bakingapp.utils.Options;
 import com.google.android.exoplayer2.ui.PlayerView;
 
 
-public class StepFragment extends Fragment {
+public class StepFragment extends Fragment implements View.OnClickListener {
   public static final String TAG = Options.XTAG + StepFragment.class.getSimpleName();
 
   public interface OnStepNavigationListener {
@@ -45,6 +45,9 @@ public class StepFragment extends Fragment {
     mStepDescTV = rootView.findViewById(R.id.step_description);
     mPrevButton = rootView.findViewById(R.id.prev_step_button);
     mNextButton = rootView.findViewById(R.id.next_step_button);
+    
+    if (mPrevButton != null) mPrevButton.setOnClickListener(this);
+    if (mNextButton != null) mNextButton.setOnClickListener(this);
 
     return rootView;
   }
@@ -57,5 +60,24 @@ public class StepFragment extends Fragment {
     if (mStepTitleTV != null) mStepTitleTV.setText(step.getShortDescription());
     if (mStepDescTV != null) mStepDescTV.setText(step.getDescription());
   }
+
+
+  /**
+   * Navigatio buttons (Next Step, Previous Step) click.
+   * @param v clicked view.
+   */
+  @Override
+  public void onClick (View v) {
+    if (mStepNavigationListener == null) return;
+    switch (v.getId()) {
+      case R.id.prev_step_button:
+        mStepNavigationListener.onClickPrev();
+        break;
+      case R.id.next_step_button:
+        mStepNavigationListener.onClickNext();
+        break;
+    }
+  }
+
 
 }
