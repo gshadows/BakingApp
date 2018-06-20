@@ -19,25 +19,25 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.example.bakingapp.R;
-import com.example.bakingapp.data.Recipe;
+import com.example.bakingapp.data.Step;
 import com.example.bakingapp.utils.Options;
 
 import java.util.List;
 
 
-public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipeHolder> {
-  public static final String TAG = Options.XTAG + RecipesAdapter.class.getSimpleName();
+public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepHolder> {
+  public static final String TAG = Options.XTAG + StepsAdapter.class.getSimpleName();
   
   public interface OnClickListener { void onClick (int itemId); }
   
   private Context mContext;
   private OnClickListener mOnClickListener;
 
-  private List<Recipe> mRecipes;
+  private List<Step> mSteps;
   private RequestOptions mRequestOptions;
   
 
-  public RecipesAdapter (Context context, OnClickListener listener) {
+  public StepsAdapter (Context context, OnClickListener listener) {
     mContext = context;
     mRequestOptions = new RequestOptions()
         .error(R.mipmap.ic_launcher_round)
@@ -54,35 +54,34 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipeHo
   
   @NonNull
   @Override
-  public RecipeHolder onCreateViewHolder (@NonNull ViewGroup parent, int viewType) {
-    View view = LayoutInflater.from(mContext).inflate(R.layout.item_recipe, parent, false);
-    return new RecipeHolder(view);
+  public StepHolder onCreateViewHolder (@NonNull ViewGroup parent, int viewType) {
+    View view = LayoutInflater.from(mContext).inflate(R.layout.item_step, parent, false);
+    return new StepHolder(view);
   }
   
   
   @Override
-  public void onBindViewHolder (@NonNull RecipeHolder holder, int position) {
+  public void onBindViewHolder (@NonNull StepHolder holder, int position) {
     
-    if ((mRecipes == null) || (mRecipes.size() < position)) return;
-    final Recipe recipe = mRecipes.get(position);
+    if ((mSteps == null) || (mSteps.size() < position)) return;
+    final Step step = mSteps.get(position);
     
-    Log.d(TAG, "Recipe #" + position);
-    Log.d(TAG, "ID:    " + recipe.getId());
-    Log.d(TAG, "Image: " + recipe.getImage());
-    Log.d(TAG, "Name:  " + recipe.getName());
-    Log.d(TAG, "Servs: " + recipe.getServings());
-    Log.d(TAG, "Ingr:  " + recipe.getIngredients().size());
-    Log.d(TAG, "Steps: " + recipe.getSteps().size());
+    Log.d(TAG, "Step #" + position);
+    Log.d(TAG, "ID:    " + step.getId());
+    Log.d(TAG, "Short: " + step.getShortDescription());
+    Log.d(TAG, "Desc:  " + step.getDescription());
+    Log.d(TAG, "Image: " + step.getThumbnailURL());
+    Log.d(TAG, "Video: " + step.getVideoURL());
     
-    holder.mTitleTV.setText(recipe.getName());
-    
-    // Set recipe preview image. Use app logo if no image available.
+    holder.mNameTV.setText(step.getShortDescription());
+
+    // Set step preview image. Use app logo if no image available.
     Glide.with(holder.mImageIV)
-        .load(recipe.getImage())
+        .load(step.getThumbnailURL())
         .apply(mRequestOptions)
         .listener(new RequestListener<Drawable>() {
           @Override public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-            Log.w(TAG, "Image loading failed: " + recipe.getImage());
+            Log.w(TAG, "Image loading failed: " + step.getThumbnailURL());
             return true;
           }
           @Override public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
@@ -95,28 +94,28 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipeHo
 
   @Override
   public int getItemCount() {
-    return (mRecipes != null) ? mRecipes.size() : 0;
+    return (mSteps != null) ? mSteps.size() : 0;
   }
   
   
-  public Recipe getRecipe (int id) { return ((mRecipes != null) && (id < mRecipes.size())) ? mRecipes.get(id) : null; }
+  public Step getStep (int id) { return ((mSteps != null) && (id < mSteps.size())) ? mSteps.get(id) : null; }
   
   
-  public void setRecipes (List<Recipe> recipes) {
-    mRecipes = recipes;
+  public void setSteps (List<Step> steps) {
+    mSteps = steps;
     notifyDataSetChanged();
   }
   
   
-  public class RecipeHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+  public class StepHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     
-    public TextView   mTitleTV;
+    public TextView   mNameTV;
     public ImageView  mImageIV;
     
-    public RecipeHolder (View itemView) {
+    public StepHolder (View itemView) {
       super(itemView);
-      mTitleTV = itemView.findViewById(R.id.recipe_name_tv);
-      mImageIV = itemView.findViewById(R.id.recipe_image_iv);
+      mNameTV = itemView.findViewById(R.id.step_name_tv);
+      mImageIV = itemView.findViewById(R.id.step_image_iv);
       itemView.setOnClickListener(this);
     }
     
