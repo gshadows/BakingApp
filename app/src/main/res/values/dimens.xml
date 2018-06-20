@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  
+  <!-- Main layout recipes list grid --> 
+  <integer name="grid_columns">2</integer>
+  <dimen name="grid_recipe_name_size">20sp</dimen>
+  <dimen name="step_title_size">24sp</dimen>
+  <dimen name="step_description_size">16sp</dimen>
+  <dimen name="grid_image_size">128dp</dimen>
+  <dimen name="steps_image_size">64dp</dimen>
+  <dimen name="step_names_size">24sp</dimen>
+  <dimen name="step_name_padding">8dp</dimen>
+
+</resources>

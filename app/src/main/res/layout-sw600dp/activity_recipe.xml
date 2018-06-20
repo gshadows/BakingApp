@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  style="@style/FragmentsAutoOrientation"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  >
+
+  <fragment
+    android:id="@+id/recipe_fragment"
+    android:name="com.example.bakingapp.RecipeFragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_weight="1"
+    />
+  
+  <View
+    style="@style/SplitterAutoOrientation"
+    android:background="@android:color/darker_gray"
+    />
+
+  <fragment
+    android:id="@+id/step_fragment"
+    android:name="com.example.bakingapp.StepFragment"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_weight="1"
+    />
+
+</LinearLayout>
