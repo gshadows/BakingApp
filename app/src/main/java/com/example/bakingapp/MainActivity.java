@@ -2,7 +2,6 @@ package com.example.bakingapp;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -64,13 +63,19 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.On
     mRecipesDownloadCall.enqueue(new Callback<List<Recipe>>() {
       @Override
       public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
-        Log.d(TAG, String.format("onResponse(): received %d recipes", response.body().size()));
-        if (mAdapter != null) mAdapter.setRecipes(response.body());
-        if (mSavedPosition != NO_POSITION) mRecyclerView.scrollToPosition(mSavedPosition);
+        if (response.isSuccessful()) {
+          Log.d(TAG, String.format("onResponse(): received %d recipes", response.body().size()));
+          if (mAdapter != null) mAdapter.setRecipes(response.body());
+          if (mSavedPosition != NO_POSITION) mRecyclerView.scrollToPosition(mSavedPosition);
+        } else {
+          Log.w(TAG,String.format("onResponse() failed: %d %s", response.code(), response.message()));
+          showToast(getString(R.string.bad_server_response, response.code()));
+        }
       }
 
       @Override
       public void onFailure(Call<List<Recipe>> call, Throwable error) {
+        showToast(getString(R.string.network_error));
         Log.w(TAG, "onFailure(): " + error);
       }
     });
@@ -111,9 +116,8 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.On
   }
   
   
-  private void ShowWarning (@NonNull String text, @Nullable String msgUser) {
+  private void showToast(@NonNull String text) {
     Log.w(TAG, text);
-    if (msgUser != null) text = msgUser;
     if (mToast != null) mToast.cancel();
     mToast = Toast.makeText(this, text, Toast.LENGTH_SHORT);
     mToast.show();
@@ -124,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.On
   public void onClick (int itemId) {
     Recipe recipe = mAdapter.getRecipe(itemId);
     if (recipe == null) {
-      ShowWarning ("No recipe with id " + itemId, null);
+      Log.w(TAG, "No recipe with id " + itemId);
       return;
     }
     

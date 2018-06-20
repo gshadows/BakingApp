@@ -29,8 +29,9 @@ public class RecipeActivity extends AppCompatActivity implements RecipeFragment.
   @Override
   protected void onCreate (Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    Log.d(TAG, "onCreate() - before setContentView()");
     setContentView(R.layout.activity_recipe);
-    Log.d(TAG, "onCreate()");
+    Log.d(TAG, "onCreate() - after setContentView()");
     
     FragmentManager fm = getSupportFragmentManager();
     mRecipeFragment = (RecipeFragment)fm.findFragmentById(R.id.recipe_fragment);
