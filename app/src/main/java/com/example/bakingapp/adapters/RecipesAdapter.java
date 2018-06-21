@@ -22,7 +22,7 @@ import com.example.bakingapp.R;
 import com.example.bakingapp.data.Recipe;
 import com.example.bakingapp.utils.Options;
 
-import java.util.List;
+import java.util.ArrayList;
 
 
 public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipeHolder> {
@@ -33,7 +33,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipeHo
   private Context mContext;
   private OnClickListener mOnClickListener;
 
-  private List<Recipe> mRecipes;
+  private ArrayList<Recipe> mRecipes;
   private RequestOptions mRequestOptions;
   
 
@@ -102,7 +102,10 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipeHo
   public Recipe getRecipe (int id) { return ((mRecipes != null) && (id < mRecipes.size())) ? mRecipes.get(id) : null; }
   
   
-  public void setRecipes (List<Recipe> recipes) {
+  public ArrayList<Recipe> getRecipes() { return mRecipes; }
+  
+  
+  public void setRecipes (ArrayList<Recipe> recipes) {
     mRecipes = recipes;
     notifyDataSetChanged();
   }

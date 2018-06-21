@@ -14,7 +14,7 @@ import com.example.bakingapp.data.BakingApiBuilder;
 import com.example.bakingapp.data.Recipe;
 import com.example.bakingapp.utils.Options;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.On
   public static final String TAG = Options.XTAG + MainActivity.class.getSimpleName();
   
   public static final String SAVED_KEY_POSITION = "pos";
+  public static final String SAVED_KEY_RECIPES  = "recipes";
 
 
   private Toast mToast = null;
@@ -34,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.On
   private RecipesAdapter mAdapter;
   
   private BakingApiBuilder.BakingApi mBakingAPI;
-  private Call<List<Recipe>> mRecipesDownloadCall;
+  private Call<ArrayList<Recipe>> mRecipesDownloadCall;
   
   private int mSavedPosition = NO_POSITION;
   
@@ -47,22 +48,36 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.On
     mRecyclerView = findViewById(R.id.main_rv);
     mAdapter = new RecipesAdapter(this, this);
     mRecyclerView.setAdapter(mAdapter);
-    
+
+    ArrayList<Recipe> savedRecipes = null;
     if (savedInstanceState != null) {
       // Restore activity state.
       mSavedPosition = savedInstanceState.getInt(SAVED_KEY_POSITION, NO_POSITION); // Remember until load completes.
+      savedRecipes = savedInstanceState.getParcelableArrayList(SAVED_KEY_RECIPES);
+    }
+    
+    // Finally request recipes.
+    if (savedRecipes == null) {
+      Log.d(TAG, "Will request recipes...");
+      requestRecipes();
+    } else {
+      Log.d(TAG, "Restored recipes from saved state!");
+      mAdapter.setRecipes(savedRecipes);
     }
   }
-  
-  
+
+
+  /**
+   * Request recipes from network using Retrofit and handle results/errors asynchronously.
+   */
   private void requestRecipes() {
     if (mBakingAPI == null) mBakingAPI = BakingApiBuilder.getBakingApi();
     if (mRecipesDownloadCall != null) mRecipesDownloadCall.cancel();
     mRecipesDownloadCall = BakingApiBuilder.getBakingApi().getRecipes();
 
-    mRecipesDownloadCall.enqueue(new Callback<List<Recipe>>() {
+    mRecipesDownloadCall.enqueue(new Callback<ArrayList<Recipe>>() {
       @Override
-      public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
+      public void onResponse(Call<ArrayList<Recipe>> call, Response<ArrayList<Recipe>> response) {
         if (response.isSuccessful()) {
           Log.d(TAG, String.format("onResponse(): received %d recipes", response.body().size()));
           if (mAdapter != null) mAdapter.setRecipes(response.body());
@@ -74,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.On
       }
 
       @Override
-      public void onFailure(Call<List<Recipe>> call, Throwable error) {
+      public void onFailure(Call<ArrayList<Recipe>> call, Throwable error) {
         showToast(getString(R.string.network_error));
         Log.w(TAG, "onFailure(): " + error);
       }
@@ -82,13 +97,6 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.On
   }
 
 
-  @Override
-  protected void onStart() {
-    super.onStart();
-    requestRecipes();
-  }
-  
-  
   @Override
   protected void onStop() {
     super.onStop();
@@ -108,10 +116,17 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.On
   protected void onSaveInstanceState (Bundle outState) {
     super.onSaveInstanceState (outState);
     
-    if ((mAdapter != null) && (mAdapter.getItemCount() >= 2)) {
+    if (mAdapter != null) {
+      ArrayList<Recipe> recipes =  mAdapter.getRecipes();
+      
       // Save RV position only if more then 1 item and if position is not zero (and exists).
-      int pos = getRecyclerViewPosition();
-      if (pos > 0) outState.putInt(SAVED_KEY_POSITION, pos);
+      if (recipes.size() >= 2) {
+        int pos = getRecyclerViewPosition();
+        if (pos > 0) outState.putInt(SAVED_KEY_POSITION, pos);
+      }
+      
+      // Save recipes list if not empty.
+      if (recipes.size() > 0) outState.putParcelableArrayList(SAVED_KEY_RECIPES, recipes);
     }
   }
   
