@@ -1,5 +1,6 @@
 package com.example.bakingapp;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -11,12 +12,13 @@ import android.widget.TextView;
 
 import com.example.bakingapp.data.Step;
 import com.example.bakingapp.utils.Options;
+import com.example.bakingapp.utils.Utils;
 import com.google.android.exoplayer2.ui.PlayerView;
 
 
 public class StepFragment extends Fragment implements View.OnClickListener {
   public static final String TAG = Options.XTAG + StepFragment.class.getSimpleName();
-
+  
   public interface OnStepNavigationListener {
     void onClickPrev();
     void onClickNext();
@@ -28,9 +30,22 @@ public class StepFragment extends Fragment implements View.OnClickListener {
   private Button mPrevButton, mNextButton;
 
   private Step mStep;
+  private int mListPosition;
   
 
-  public StepFragment() {
+  public StepFragment() {} // Unused constructor.
+
+
+  @Override
+  public void onAttach (Context context) {
+    super.onAttach(context);
+    
+    // Attempt to get OnStepClickListener interface for parent activity.
+    try {
+      mStepNavigationListener = (OnStepNavigationListener)context;
+    } catch (ClassCastException e) {
+      throw new ClassCastException(context.toString() + " must implement OnStepNavigationListener");
+    }
   }
 
 
@@ -39,26 +54,45 @@ public class StepFragment extends Fragment implements View.OnClickListener {
     Log.d(TAG, "onCreateView()");
 
     final View rootView = inflater.inflate(R.layout.fragment_recipe, container, false);
-
+    
+    // Get all views.
     mPlayerView = rootView.findViewById(R.id.exoplayer);
     mStepTitleTV = rootView.findViewById(R.id.step_title);
     mStepDescTV = rootView.findViewById(R.id.step_description);
     mPrevButton = rootView.findViewById(R.id.prev_step_button);
     mNextButton = rootView.findViewById(R.id.next_step_button);
     
-    if (mPrevButton != null) mPrevButton.setOnClickListener(this);
-    if (mNextButton != null) mNextButton.setOnClickListener(this);
+    // Set inter-step navigation buttons onClick listeners and disable.
+    if (mPrevButton != null) {
+      mPrevButton.setOnClickListener(this);
+      mPrevButton.setEnabled(false);
+    }
+    if (mNextButton != null) {
+      mNextButton.setOnClickListener(this);
+      mNextButton.setEnabled(false);
+    }
 
     return rootView;
   }
-  
-  
-  public void setStep (Step step) {
+
+
+  /**
+   * Called by the activity to set current step data and flags.
+   * @param step Current step data to display in fragment.
+   * @param listPosition Current step position flags in step list: is this FIRST and/or LAST step?
+   */
+  public void setStep (Step step, int listPosition) {
     Log.d(TAG, String.format("setStep() id = %d, desc = %s", step.getId(), step.getShortDescription()));
     mStep = step;
+    mListPosition = listPosition;
     
+    // Set text fields.
     if (mStepTitleTV != null) mStepTitleTV.setText(step.getShortDescription());
-    if (mStepDescTV != null) mStepDescTV.setText(step.getDescription());
+    if (mStepDescTV  != null) mStepDescTV.setText (step.getDescription());
+    
+    // Ensure only applicable buttons active.
+    if (mPrevButton != null) mPrevButton.setEnabled((listPosition & Utils.LIST_POSITION_FIRST) != 0);
+    if (mNextButton != null) mNextButton.setEnabled((listPosition & Utils.LIST_POSITION_LAST)  != 0);
   }
 
 
@@ -71,10 +105,10 @@ public class StepFragment extends Fragment implements View.OnClickListener {
     if (mStepNavigationListener == null) return;
     switch (v.getId()) {
       case R.id.prev_step_button:
-        mStepNavigationListener.onClickPrev();
+        if ((mListPosition & Utils.LIST_POSITION_FIRST) != 0) mStepNavigationListener.onClickPrev();
         break;
       case R.id.next_step_button:
-        mStepNavigationListener.onClickNext();
+        if ((mListPosition & Utils.LIST_POSITION_LAST) != 0) mStepNavigationListener.onClickNext();
         break;
     }
   }

@@ -4,6 +4,8 @@ import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import java.util.List;
+
 import static android.support.v7.widget.RecyclerView.NO_POSITION;
 
 
@@ -33,6 +35,24 @@ public class Utils {
     int pos = lm.findFirstCompletelyVisibleItemPosition();
     if (pos == NO_POSITION) pos = lm.findFirstVisibleItemPosition(); // If all items partially invisible.
     return pos;
+  }
+
+
+  // Current step's list position.
+  public static final int LIST_POSITION_MIDDLE = 1;
+  public static final int LIST_POSITION_FIRST  = 1;
+  public static final int LIST_POSITION_LAST   = 2;
+  public static final int LIST_POSITION_ONLY   = 3;
+
+  /**
+   * Detect if current list item is FIRST and/or LAST in steps list.
+   * @return Corresponding flags set.
+   */
+  public static int getListPositionFlags (List list, int position) {
+    int flags = 0;
+    if (position <= 0) flags |= LIST_POSITION_FIRST;
+    if (position >= (list.size() - 1)) flags |= LIST_POSITION_LAST;
+    return flags;
   }
 
 

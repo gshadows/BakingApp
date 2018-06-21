@@ -28,7 +28,7 @@ import java.util.ArrayList;
 public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipeHolder> {
   public static final String TAG = Options.XTAG + RecipesAdapter.class.getSimpleName();
   
-  public interface OnClickListener { void onClick (int itemId); }
+  public interface OnClickListener { void onRecipeClick (int itemId); }
   
   private Context mContext;
   private OnClickListener mOnClickListener;
@@ -124,7 +124,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipeHo
     }
     
     @Override public void onClick (View v) {
-      if (mOnClickListener != null) mOnClickListener.onClick(getAdapterPosition());
+      if (mOnClickListener != null) mOnClickListener.onRecipeClick(getAdapterPosition());
     }
   }
 }

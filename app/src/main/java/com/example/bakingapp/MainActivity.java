@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.On
   
   private BakingApiBuilder.BakingApi mBakingAPI;
   private Call<ArrayList<Recipe>> mRecipesDownloadCall;
+  private boolean mRequestStopped = false;
   
   private int mSavedPosition = NO_POSITION;
   
@@ -59,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.On
     
     // Finally request recipes.
     if (savedRecipes == null) {
-      Log.d(TAG, "Will request recipes...");
+      Log.d(TAG, "onCreate() Requesting recipes...");
       requestRecipes();
     } else {
       Log.d(TAG, "Restored recipes from saved state!");
@@ -99,41 +100,67 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.On
 
 
   @Override
-  protected void onStop() {
-    super.onStop();
-    if (mRecipesDownloadCall != null) mRecipesDownloadCall.cancel();
+  protected void onStart() {
+    super.onStart();
+    if (mRequestStopped) {
+      Log.d(TAG, "onStart() Requesting recipes... (after was stopped)");
+      requestRecipes(); // Restart network request after stopped.
+    }
   }
   
 
+  @Override
+  protected void onStop() {
+    super.onStop();
+    if (mRecipesDownloadCall != null) {
+      Log.d(TAG, "onStop() Stopping recipes request.");
+      mRequestStopped = true;
+      mRecipesDownloadCall.cancel();
+      mRecipesDownloadCall = null;
+    }
+  }
+  
+  
   @Override
   protected void onSaveInstanceState (Bundle outState) {
     super.onSaveInstanceState (outState);
     
     if (mAdapter != null) {
-      ArrayList<Recipe> recipes =  mAdapter.getRecipes();
-      
-      // Save RV position only if more then 1 item and if position is not zero (and exists).
-      if (recipes.size() >= 2) {
-        int pos = Utils.getRecyclerViewPosition(mRecyclerView);
-        if (pos > 0) outState.putInt(SAVED_KEY_POSITION, pos);
+      ArrayList<Recipe> recipes = mAdapter.getRecipes();
+      if (recipes != null) {
+        
+        // Save RV position only if more then 1 item and if position is not zero (and exists).
+        if (recipes.size() >= 2) {
+          int pos = Utils.getRecyclerViewPosition(mRecyclerView);
+          if (pos > 0) outState.putInt(SAVED_KEY_POSITION, pos);
+        }
+
+        // Save recipes list if not empty.
+        if (recipes.size() > 0) outState.putParcelableArrayList(SAVED_KEY_RECIPES, recipes);
+        
       }
-      
-      // Save recipes list if not empty.
-      if (recipes.size() > 0) outState.putParcelableArrayList(SAVED_KEY_RECIPES, recipes);
     }
   }
-  
-  
+
+
+  /**
+   * Show toast message. Reuse existing toast to prevent multiple messages queued.
+   * @param text Message text.
+   */
   private void showToast(@NonNull String text) {
     Log.w(TAG, text);
     if (mToast != null) mToast.cancel();
     mToast = Toast.makeText(this, text, Toast.LENGTH_SHORT);
     mToast.show();
   }
-  
-  
+
+
+  /**
+   * This called when user clicks on a recipe. Recipe details should be opened next.
+   * @param itemId Unused view ID.
+   */
   @Override
-  public void onClick (int itemId) {
+  public void onRecipeClick (int itemId) {
     Recipe recipe = mAdapter.getRecipe(itemId);
     if (recipe == null) {
       Log.w(TAG, "No recipe with id " + itemId);
