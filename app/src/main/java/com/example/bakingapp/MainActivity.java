@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.Toast;
@@ -13,6 +13,7 @@ import com.example.bakingapp.adapters.RecipesAdapter;
 import com.example.bakingapp.data.BakingApiBuilder;
 import com.example.bakingapp.data.Recipe;
 import com.example.bakingapp.utils.Options;
+import com.example.bakingapp.utils.Utils;
 
 import java.util.ArrayList;
 
@@ -104,14 +105,6 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.On
   }
   
 
-  private int getRecyclerViewPosition() {
-    GridLayoutManager lm = (GridLayoutManager)mRecyclerView.getLayoutManager();
-    int pos = lm.findFirstCompletelyVisibleItemPosition();
-    if (pos == NO_POSITION) pos = lm.findFirstVisibleItemPosition(); // If all items partially invisible.
-    return pos;
-  }
-
-
   @Override
   protected void onSaveInstanceState (Bundle outState) {
     super.onSaveInstanceState (outState);
@@ -121,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.On
       
       // Save RV position only if more then 1 item and if position is not zero (and exists).
       if (recipes.size() >= 2) {
-        int pos = getRecyclerViewPosition();
+        int pos = Utils.getRecyclerViewPosition(mRecyclerView);
         if (pos > 0) outState.putInt(SAVED_KEY_POSITION, pos);
       }
       
