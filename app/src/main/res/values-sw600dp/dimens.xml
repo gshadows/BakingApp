@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  
-  <!-- Main layout recipes list grid --> 
+
+  <!-- Main activity: recipes list grid -->
   <integer name="grid_columns">3</integer>
   <dimen name="grid_recipe_name_size">24sp</dimen>
   

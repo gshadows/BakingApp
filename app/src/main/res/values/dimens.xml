@@ -1,14 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   
-  <!-- Main layout recipes list grid --> 
+  <!-- Main activity: recipes list grid --> 
   <integer name="grid_columns">2</integer>
+  <dimen name="grid_image_size">128dp</dimen>
   <dimen name="grid_recipe_name_size">20sp</dimen>
+  <dimen name="grid_recipe_padding">4dp</dimen>
+
+  <!-- Recipe fragment -->
+  <dimen name="recipe_title_size">36sp</dimen>
+  <dimen name="recipe_ingredients_header_size">20sp</dimen>
+  
+  <!-- Recipe fragment -> Step RV item -->
+  <dimen name="step_item_padding">8dp</dimen>
+  <dimen name="step_item_image_size">64dp</dimen>
+  <dimen name="step_item_name_size">24sp</dimen>
+  <dimen name="step_item_name_padding">8dp</dimen>
+  
+  <!-- Step fragment -->
   <dimen name="step_title_size">24sp</dimen>
   <dimen name="step_description_size">16sp</dimen>
-  <dimen name="grid_image_size">128dp</dimen>
-  <dimen name="steps_image_size">64dp</dimen>
-  <dimen name="step_names_size">24sp</dimen>
-  <dimen name="step_name_padding">8dp</dimen>
 
 </resources>

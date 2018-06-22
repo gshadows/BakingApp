@@ -5,14 +5,14 @@
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
   android:orientation="horizontal"
-  android:padding="8dp"
+  android:padding="@dimen/step_item_padding"
   tools:background="@color/colorPrimary"
   >
   
   <ImageView
     android:id="@+id/step_image_iv"
-    android:layout_width="@dimen/steps_image_size"
-    android:layout_height="@dimen/steps_image_size"
+    android:layout_width="@dimen/step_item_image_size"
+    android:layout_height="@dimen/step_item_image_size"
     android:scaleType="centerCrop"
     tools:src="@mipmap/ic_launcher"
     />
@@ -22,9 +22,9 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:textColor="@color/colorAccent"
-    android:textSize="@dimen/step_names_size"
-    android:paddingLeft="@dimen/step_name_padding"
-    android:paddingStart="8dp"
+    android:textSize="@dimen/step_item_name_size"
+    android:paddingLeft="@dimen/step_item_name_padding"
+    android:paddingStart="@dimen/step_item_name_padding"
     android:layout_gravity="center_vertical"
     tools:text="Press the crust into baking form."
     />

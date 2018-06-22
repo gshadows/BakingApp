@@ -5,7 +5,9 @@
   xmlns:tools="http://schemas.android.com/tools"
   style="@style/FragmentsAutoOrientation"
   android:layout_width="match_parent"
-  android:layout_height="match_parent">
+  android:layout_height="match_parent"
+  android:background="@color/colorPrimaryDark"
+  >
   
   <LinearLayout
     android:orientation="vertical"
@@ -18,14 +20,15 @@
       android:id="@+id/recipe_name_tv"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:textSize="24sp"
+      android:textSize="@dimen/recipe_title_size"
       android:layout_gravity="center_horizontal"
+      tools:text="Chocolate pie"
       />
 
     <TextView
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:textSize="20sp"
+      android:textSize="@dimen/recipe_ingredients_header_size"
       android:text="@string/ingredients"
       />
 
