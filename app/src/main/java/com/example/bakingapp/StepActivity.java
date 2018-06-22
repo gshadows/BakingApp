@@ -63,6 +63,7 @@ public class StepActivity extends AppCompatActivity implements StepFragment.OnSt
    */
   @Override
   public void onClickPrev() {
+    Log.d(TAG, "onClickPrev");
     if (mCurrentStep > 0) mCurrentStep--;
     setFragmentStep();
   }
@@ -73,6 +74,7 @@ public class StepActivity extends AppCompatActivity implements StepFragment.OnSt
    */
   @Override
   public void onClickNext() {
+    Log.d(TAG, "onClickNext");
     if (mCurrentStep < (mSteps.size() - 1)) mCurrentStep++;
     setFragmentStep();
   }

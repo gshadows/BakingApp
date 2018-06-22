@@ -66,14 +66,6 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipeHo
     if ((mRecipes == null) || (mRecipes.size() < position)) return;
     final Recipe recipe = mRecipes.get(position);
     
-    Log.d(TAG, "Recipe #" + position);
-    Log.d(TAG, "ID:    " + recipe.getId());
-    Log.d(TAG, "Image: " + recipe.getImage());
-    Log.d(TAG, "Name:  " + recipe.getName());
-    Log.d(TAG, "Servs: " + recipe.getServings());
-    Log.d(TAG, "Ingr:  " + recipe.getIngredients().size());
-    Log.d(TAG, "Steps: " + recipe.getSteps().size());
-    
     holder.mTitleTV.setText(recipe.getName());
     
     // Set recipe preview image. Use app logo if no image available.

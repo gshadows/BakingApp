@@ -33,9 +33,7 @@ public class RecipeActivity extends AppCompatActivity
   @Override
   protected void onCreate (Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    Log.d(TAG, "onCreate() - before setContentView()");
     setContentView(R.layout.activity_recipe);
-    Log.d(TAG, "onCreate() - after setContentView()");
     
     // Get fragments references.
     FragmentManager fm = getSupportFragmentManager();
@@ -75,7 +73,7 @@ public class RecipeActivity extends AppCompatActivity
    */
   @Override
   public void onStepClick (Step step) {
-    Log.d(TAG, String.format("onClick() step id %d, desc %s", step.getId(), step.getShortDescription()));
+    Log.d(TAG, String.format("onStepClick() step id %d, desc %s", step.getId(), step.getShortDescription()));
     // TODO: Either run new step activity or update step fragment.
   }
 
@@ -96,6 +94,7 @@ public class RecipeActivity extends AppCompatActivity
    */
   @Override
   public void onClickPrev() {
+    Log.d(TAG, "onClickPrev");
     if (mCurrentStep > 0) mCurrentStep--;
     setFragmentStep();
   }
@@ -108,6 +107,7 @@ public class RecipeActivity extends AppCompatActivity
    */
   @Override
   public void onClickNext() {
+    Log.d(TAG, "onClickNext");
     if (mCurrentStep < (mRecipe.getSteps().size() - 1)) mCurrentStep++;
     setFragmentStep();
   }

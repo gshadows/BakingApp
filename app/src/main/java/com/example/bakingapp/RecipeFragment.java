@@ -87,7 +87,7 @@ public class RecipeFragment extends Fragment implements StepsAdapter.OnClickList
   public void onClick (int itemId) {
     Step step = mStepsAdapter.getStep(itemId);
     if (step != null) {
-      mStepClickListener.onStepClick(step);
+      if (mStepClickListener != null) mStepClickListener.onStepClick(step);
     } else {
       Log.w(TAG, "onClick() no such step: " + itemId);
     }

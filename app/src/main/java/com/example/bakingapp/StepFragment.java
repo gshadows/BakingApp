@@ -51,8 +51,6 @@ public class StepFragment extends Fragment implements View.OnClickListener {
 
   @Override
   public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-    Log.d(TAG, "onCreateView()");
-
     final View rootView = inflater.inflate(R.layout.fragment_recipe, container, false);
     
     // Get all views.
@@ -79,20 +77,20 @@ public class StepFragment extends Fragment implements View.OnClickListener {
   /**
    * Called by the activity to set current step data and flags.
    * @param step Current step data to display in fragment.
-   * @param listPosition Current step position flags in step list: is this FIRST and/or LAST step?
+   * @param listPositionFlags Current step position flags in step list: is this FIRST and/or LAST step?
    */
-  public void setStep (Step step, int listPosition) {
-    Log.d(TAG, String.format("setStep() id = %d, desc = %s", step.getId(), step.getShortDescription()));
+  public void setStep (Step step, int listPositionFlags) {
+    Log.d(TAG, String.format("setStep() id = %d, desc = %s, flags = ", step.getId(), step.getShortDescription(), listPositionFlags));
     mStep = step;
-    mListPosition = listPosition;
+    mListPosition = listPositionFlags;
     
     // Set text fields.
     if (mStepTitleTV != null) mStepTitleTV.setText(step.getShortDescription());
     if (mStepDescTV  != null) mStepDescTV.setText (step.getDescription());
     
     // Ensure only applicable buttons active.
-    if (mPrevButton != null) mPrevButton.setEnabled((listPosition & Utils.LIST_POSITION_FIRST) != 0);
-    if (mNextButton != null) mNextButton.setEnabled((listPosition & Utils.LIST_POSITION_LAST)  != 0);
+    if (mPrevButton != null) mPrevButton.setEnabled((listPositionFlags & Utils.LIST_POSITION_FIRST) != 0);
+    if (mNextButton != null) mNextButton.setEnabled((listPositionFlags & Utils.LIST_POSITION_LAST)  != 0);
   }
 
 

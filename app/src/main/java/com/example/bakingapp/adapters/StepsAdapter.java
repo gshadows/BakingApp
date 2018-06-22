@@ -66,13 +66,6 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepHolder> 
     if ((mSteps == null) || (mSteps.size() < position)) return;
     final Step step = mSteps.get(position);
     
-    Log.d(TAG, "Step #" + position);
-    Log.d(TAG, "ID:    " + step.getId());
-    Log.d(TAG, "Short: " + step.getShortDescription());
-    Log.d(TAG, "Desc:  " + step.getDescription());
-    Log.d(TAG, "Image: " + step.getThumbnailURL());
-    Log.d(TAG, "Video: " + step.getVideoURL());
-    
     holder.mNameTV.setText(step.getShortDescription());
 
     // Set step preview image. Use app logo if no image available.

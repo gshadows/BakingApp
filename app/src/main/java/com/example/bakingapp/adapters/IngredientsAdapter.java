@@ -42,13 +42,8 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
     if ((mIngredients == null) || (mIngredients.size() < position)) return;
     final Ingredient ingredient = mIngredients.get(position);
     
-    Log.d(TAG, "Ingredient #" + position);
-    Log.d(TAG, "Name:     " + ingredient.getIngredient());
-    Log.d(TAG, "Measure:  " + ingredient.getMeasure());
-    Log.d(TAG, "Quantity: " + ingredient.getQuantity());
-    
     String measure = Utils.makeHumanReadableMeasureString(mContext, ingredient.getMeasure());
-    Log.d(TAG, "Measure -> " + measure);
+    Log.d(TAG, "Measure " + ingredient.getMeasure() + " -> " + measure);
     String text = String.format("%s: %.2f %s", ingredient.getIngredient(), ingredient.getQuantity(), measure);
     holder.mTextTV.setText(text);
   }
