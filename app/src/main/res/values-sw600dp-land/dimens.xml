@@ -2,7 +2,7 @@
 <resources>
 
   <!-- Main activity: recipes list grid -->
-  <integer name="grid_columns">4</integer>
+  <integer name="grid_columns">5</integer>
   <dimen name="grid_recipe_name_size">32sp</dimen>
   
 </resources>

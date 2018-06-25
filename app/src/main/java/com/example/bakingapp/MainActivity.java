@@ -76,10 +76,12 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.On
     if (mBakingAPI == null) mBakingAPI = BakingApiBuilder.getBakingApi();
     if (mRecipesDownloadCall != null) mRecipesDownloadCall.cancel();
     mRecipesDownloadCall = BakingApiBuilder.getBakingApi().getRecipes();
+    Log.d(TAG, "requestRecipes() enqueuing req " + mRecipesDownloadCall.hashCode());
 
     mRecipesDownloadCall.enqueue(new Callback<ArrayList<Recipe>>() {
       @Override
-      public void onResponse(Call<ArrayList<Recipe>> call, Response<ArrayList<Recipe>> response) {
+      public void onResponse (Call<ArrayList<Recipe>> call, Response<ArrayList<Recipe>> response) {
+        Log.d(TAG, "onResponse() " + call.hashCode());
         if (response.isSuccessful()) {
           Log.d(TAG, String.format("onResponse(): received %d recipes", response.body().size()));
           if (mAdapter != null) mAdapter.setRecipes(response.body());
@@ -91,9 +93,12 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.On
       }
 
       @Override
-      public void onFailure(Call<ArrayList<Recipe>> call, Throwable error) {
-        showToast(getString(R.string.network_error));
-        Log.w(TAG, "onFailure(): " + error);
+      public void onFailure (Call<ArrayList<Recipe>> call, Throwable error) {
+        Log.d(TAG, "onFailure() " + call.hashCode());
+        if (!call.isCanceled()) {
+          showToast(getString(R.string.network_error));
+          Log.w(TAG, "onFailure(): " + error);
+        }
       }
     });
   }
@@ -113,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.On
   protected void onStop() {
     super.onStop();
     if (mRecipesDownloadCall != null) {
-      Log.d(TAG, "onStop() Stopping recipes request.");
+      Log.d(TAG, "onStop() Stopping recipes request: " + mRecipesDownloadCall.hashCode());
       mRequestStopped = true;
       mRecipesDownloadCall.cancel();
       mRecipesDownloadCall = null;

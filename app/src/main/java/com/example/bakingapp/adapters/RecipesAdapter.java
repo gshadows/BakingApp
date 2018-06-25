@@ -74,7 +74,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipeHo
         .apply(mRequestOptions)
         .listener(new RequestListener<Drawable>() {
           @Override public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-            Log.w(TAG, "Image loading failed: " + recipe.getImage());
+            //Log.w(TAG, "Image loading failed: " + recipe.getImage());
             return true;
           }
           @Override public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
