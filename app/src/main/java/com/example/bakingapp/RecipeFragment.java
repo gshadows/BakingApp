@@ -20,27 +20,27 @@ import com.example.bakingapp.utils.Options;
 
 public class RecipeFragment extends Fragment implements StepsAdapter.OnClickListener {
   public static final String TAG = Options.XTAG + RecipeFragment.class.getSimpleName();
-
-  public interface OnStepClickListener { void onStepClick (Step step); }
+  
+  public interface OnStepClickListener { void onStepClick (int itemId); }
   private OnStepClickListener mStepClickListener;
   
   
   private RecyclerView mIngredientsRV, mStepsRV;
   private TextView mRecipeNameTV;
-
+  
   IngredientsAdapter mIngredientsAdapter;
   StepsAdapter mStepsAdapter;
   
   private Recipe mRecipe;
   
-
+  
   public RecipeFragment() {} // Unused constructor.
   
-
+  
   @Override
   public void onAttach (Context context) {
     super.onAttach(context);
-
+    
     // Attempt to get OnStepClickListener interface for parent activity.
     try {
       mStepClickListener = (OnStepClickListener)context;
@@ -81,16 +81,11 @@ public class RecipeFragment extends Fragment implements StepsAdapter.OnClickList
     mIngredientsAdapter.setIngredients(recipe.getIngredients());
     mStepsAdapter.setSteps(recipe.getSteps());
   }
-
-
+  
+  
   @Override
   public void onClick (int itemId) {
-    Step step = mStepsAdapter.getStep(itemId);
-    if (step != null) {
-      if (mStepClickListener != null) mStepClickListener.onStepClick(step);
-    } else {
-      Log.w(TAG, "onClick() no such step: " + itemId);
-    }
+    if (mStepClickListener != null) mStepClickListener.onStepClick(itemId);
   }
-
+  
 }

@@ -113,7 +113,9 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepHolder> 
     }
     
     @Override public void onClick (View v) {
-      if (mOnClickListener != null) mOnClickListener.onClick(getAdapterPosition());
+      int pos = getAdapterPosition();
+      if ((pos < 0) || (mSteps == null) || (pos > mSteps.size())) return;
+      if (mOnClickListener != null) mOnClickListener.onClick(pos);
     }
   }
 }

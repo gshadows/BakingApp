@@ -16,12 +16,12 @@ import lombok.Getter;
  */
 public class Recipe implements Parcelable {
 
-  @Getter private int              id;
-  @Getter private String           name;
-  @Getter private List<Ingredient> ingredients;
-  @Getter private List<Step>       steps;
-  @Getter private int              servings;
-  @Getter private String           image;
+  @Getter private int                   id;
+  @Getter private String                name;
+  @Getter private ArrayList<Ingredient> ingredients;
+  @Getter private ArrayList<Step>       steps;
+  @Getter private int                   servings;
+  @Getter private String                image;
   
   
   protected Recipe(@NonNull Parcel in) {

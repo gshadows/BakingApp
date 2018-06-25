@@ -1,5 +1,6 @@
 package com.example.bakingapp;
 
+import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,7 +22,7 @@ public class RecipeActivity extends AppCompatActivity
   private static final String KEY_CURRENT_STEP = "cur_step";
 
   public static final String EXTRA_RECIPE = "recipe";
-
+  
   private RecipeFragment mRecipeFragment;
   private StepFragment mStepFragment;
   
@@ -69,24 +70,36 @@ public class RecipeActivity extends AppCompatActivity
    * This called when user clicks step in ths steps list.
    * *) In case of Master-Detail activity we should select new step in StepFragment.
    * *) In case of Recipe-only activity we should open Step in separate activity.
-   * @param step
+   * @param stepNum should be inside mRecipe.
    */
   @Override
-  public void onStepClick (Step step) {
-    Log.d(TAG, String.format("onStepClick() step id %d, desc %s", step.getId(), step.getShortDescription()));
-    // TODO: Either run new step activity or update step fragment.
+  public void onStepClick (int stepNum) {
+    if (mIsTwoPane) {
+      // Step in fragment.
+      mCurrentStep = stepNum;
+      setFragmentStep();
+    } else {
+      // Separate activity.
+      Log.d(TAG, String.format("onStepClick(%d) - put %d steps", stepNum, mRecipe.getSteps().size()));
+      Intent intent = new Intent(this, StepActivity.class);
+      intent.putParcelableArrayListExtra(StepActivity.EXTRA_STEPS, mRecipe.getSteps());
+      intent.putExtra(StepActivity.EXTRA_CURRENT_STEP, stepNum);
+      startActivity(intent);
+    }
   }
-
-
+  
+  
   /**
    * Set current step to the StepFragment.
    */
   private void setFragmentStep() {
+    if (mRecipe == null) return;
     List<Step> steps = mRecipe.getSteps();
+    if (steps == null) return;
     mStepFragment.setStep(steps.get(mCurrentStep), Utils.getListPositionFlags(steps, mCurrentStep));
   }
-
-
+  
+  
   /**
    * This called when user clicks "Previous Step" button in StepFragment.
    * Normally those buttons are absent for master/detail tablet mode, but I leave this code here
@@ -98,8 +111,8 @@ public class RecipeActivity extends AppCompatActivity
     if (mCurrentStep > 0) mCurrentStep--;
     setFragmentStep();
   }
-
-
+  
+  
   /**
    * This called when user clicks "Next Step" button in StepFragment.
    * Normally those buttons are absent for master/detail tablet mode, but I leave this code here
