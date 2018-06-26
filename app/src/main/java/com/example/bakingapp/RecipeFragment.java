@@ -26,7 +26,6 @@ public class RecipeFragment extends Fragment implements StepsAdapter.OnClickList
   
   
   private RecyclerView mIngredientsRV, mStepsRV;
-  private TextView mRecipeNameTV;
   
   IngredientsAdapter mIngredientsAdapter;
   StepsAdapter mStepsAdapter;
@@ -58,7 +57,6 @@ public class RecipeFragment extends Fragment implements StepsAdapter.OnClickList
     // Get all views.
     mIngredientsRV = rootView.findViewById(R.id.ingredients_rv);
     mStepsRV = rootView.findViewById(R.id.steps_rv);
-    mRecipeNameTV = rootView.findViewById(R.id.recipe_name_tv);
     
     // Create and set adapters.
     mIngredientsAdapter = new IngredientsAdapter(getContext());
@@ -73,9 +71,6 @@ public class RecipeFragment extends Fragment implements StepsAdapter.OnClickList
   public void setRecipe (@NonNull Recipe recipe) {
     Log.d(TAG, String.format("setRecipe() id = %d, name = %s", recipe.getId(), recipe.getName()));
     mRecipe = recipe;
-    
-    // Set title.
-    mRecipeNameTV.setText(recipe.getName());
     
     // Put data to the adapters.
     mIngredientsAdapter.setIngredients(recipe.getIngredients());
