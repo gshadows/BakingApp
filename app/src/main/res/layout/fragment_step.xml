@@ -11,13 +11,7 @@
     android:id="@+id/exoplayer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    />
-  
-  <TextView
-    android:id="@+id/step_title"
-    android:textSize="@dimen/step_title_size"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_weight="1"
     />
   
   <TextView
@@ -25,25 +19,29 @@
     android:textSize="@dimen/step_description_size"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_weight="1"
     />
   
   <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:orientation="horizontal"
     >
     
     <ImageButton
       android:id="@+id/prev_step_button"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
+      android:layout_height="16dp"
       android:layout_weight="1"
+      android:src="@android:drawable/ic_media_previous"
       />
     
     <ImageButton
       android:id="@+id/next_step_button"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
+      android:layout_height="16dp"
       android:layout_weight="1"
+      android:src="@android:drawable/ic_media_next"
       />
     
   </LinearLayout>
