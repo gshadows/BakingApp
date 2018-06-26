@@ -29,8 +29,8 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.On
   
   public static final String SAVED_KEY_POSITION = "pos";
   public static final String SAVED_KEY_RECIPES  = "recipes";
-
-
+  
+  
   private Toast mToast = null;
   private RecyclerView mRecyclerView;
   private RecipesAdapter mAdapter;
@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.On
     mRecyclerView = findViewById(R.id.main_rv);
     mAdapter = new RecipesAdapter(this, this);
     mRecyclerView.setAdapter(mAdapter);
-
+    
     ArrayList<Recipe> savedRecipes = null;
     if (savedInstanceState != null) {
       // Restore activity state.
@@ -65,8 +65,8 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.On
       mAdapter.setRecipes(savedRecipes);
     }
   }
-
-
+  
+  
   /**
    * Request recipes from network using Retrofit and handle results/errors asynchronously.
    */
@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.On
     if (mBakingAPI == null) mBakingAPI = BakingApiBuilder.getBakingApi();
     if (mRecipesDownloadCall != null) mRecipesDownloadCall.cancel();
     mRecipesDownloadCall = BakingApiBuilder.getBakingApi().getRecipes();
-
+    
     mRecipesDownloadCall.enqueue(new Callback<ArrayList<Recipe>>() {
       @Override
       public void onResponse (Call<ArrayList<Recipe>> call, Response<ArrayList<Recipe>> response) {
@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.On
           showToast(getString(R.string.bad_server_response, response.code()));
         }
       }
-
+      
       @Override
       public void onFailure (Call<ArrayList<Recipe>> call, Throwable error) {
         mRecipesDownloadCall = null;
@@ -98,8 +98,8 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.On
       }
     });
   }
-
-
+  
+  
   @Override
   protected void onStart() {
     super.onStart();
@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.On
     }
   }
   
-
+  
   @Override
   protected void onStop() {
     super.onStop();
@@ -133,15 +133,15 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.On
           int pos = Utils.getRecyclerViewPosition(mRecyclerView);
           if (pos > 0) outState.putInt(SAVED_KEY_POSITION, pos);
         }
-
+        
         // Save recipes list if not empty.
         if (recipes.size() > 0) outState.putParcelableArrayList(SAVED_KEY_RECIPES, recipes);
         
       }
     }
   }
-
-
+  
+  
   /**
    * Show toast message. Reuse existing toast to prevent multiple messages queued.
    * @param text Message text.
@@ -152,8 +152,8 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.On
     mToast = Toast.makeText(this, text, Toast.LENGTH_SHORT);
     mToast.show();
   }
-
-
+  
+  
   /**
    * This called when user clicks on a recipe. Recipe details should be opened next.
    * @param itemId Unused view ID.

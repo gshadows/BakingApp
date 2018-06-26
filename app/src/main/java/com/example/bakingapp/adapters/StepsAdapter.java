@@ -42,10 +42,6 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepHolder> 
     mRequestOptions = new RequestOptions()
         .error(R.mipmap.ic_launcher_round)
         .placeholder(R.mipmap.ic_launcher_round)
-        //.centerCrop()
-        //.centerInside()
-        //.fitCenter()
-        //.circleCrop()
     ;
 
     mOnClickListener = listener;
@@ -62,26 +58,22 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepHolder> 
   
   @Override
   public void onBindViewHolder (@NonNull StepHolder holder, int position) {
-    
     if ((mSteps == null) || (mSteps.size() < position)) return;
-    final Step step = mSteps.get(position);
+    Step step = mSteps.get(position);
     
     holder.mNameTV.setText(step.getShortDescription());
-
+    
     // Set step preview image. Use app logo if no image available.
-    Glide.with(holder.mImageIV)
-        .load(step.getThumbnailURL())
-        .apply(mRequestOptions)
-        .listener(new RequestListener<Drawable>() {
-          @Override public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-            Log.w(TAG, "Image loading failed: " + step.getThumbnailURL());
-            return true;
-          }
-          @Override public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-            return true;
-          }
-        })
-        .into(holder.mImageIV);
+    String thumbnail = step.getThumbnailURL();
+    if ((thumbnail != null) && !thumbnail.isEmpty()) {
+      Glide.with(holder.mImageIV)
+          .load(thumbnail)
+          .apply(mRequestOptions)
+          .into(holder.mImageIV);
+    } else {
+      // Don't waste time.
+      holder.mImageIV.setImageResource(R.mipmap.ic_launcher);
+    }
   }
 
 
