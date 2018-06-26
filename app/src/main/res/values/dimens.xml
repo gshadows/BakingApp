@@ -8,7 +8,6 @@
   <dimen name="grid_recipe_padding">4dp</dimen>
 
   <!-- Recipe fragment -->
-  <dimen name="recipe_title_size">36sp</dimen>
   <dimen name="recipe_ingredients_header_size">20sp</dimen>
   
   <!-- Recipe fragment -> Step RV item -->

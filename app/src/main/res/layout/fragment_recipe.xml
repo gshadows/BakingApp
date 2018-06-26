@@ -17,15 +17,6 @@
     >
     
     <TextView
-      android:id="@+id/recipe_name_tv"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:textSize="@dimen/recipe_title_size"
-      android:layout_gravity="center_horizontal"
-      tools:text="Chocolate pie"
-      />
-
-    <TextView
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:textSize="@dimen/recipe_ingredients_header_size"

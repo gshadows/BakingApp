@@ -54,7 +54,9 @@ public class StepActivity extends AppCompatActivity implements StepFragment.OnSt
    * Set current step to the StepFragment.
    */
   private void setFragmentStep() {
-    mStepFragment.setStep(mSteps.get(mCurrentStep), Utils.getListPositionFlags(mSteps, mCurrentStep));
+    Step step = mSteps.get(mCurrentStep);
+    mStepFragment.setStep(step, Utils.getListPositionFlags(mSteps, mCurrentStep));
+    setTitle(step.getShortDescription());
   }
 
 

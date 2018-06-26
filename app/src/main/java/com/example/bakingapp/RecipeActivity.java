@@ -50,6 +50,7 @@ public class RecipeActivity extends AppCompatActivity
       Log.e(TAG, "Started without recipe extra");
       finish(); return;
     }
+    setTitle(mRecipe.getName());
     
     // Restore previous state.
     if (savedInstanceState != null) {
