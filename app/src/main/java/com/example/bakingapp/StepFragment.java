@@ -51,7 +51,7 @@ public class StepFragment extends Fragment implements View.OnClickListener {
 
   @Override
   public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-    final View rootView = inflater.inflate(R.layout.fragment_recipe, container, false);
+    final View rootView = inflater.inflate(R.layout.fragment_step, container, false);
     
     // Get all views.
     mPlayerView = rootView.findViewById(R.id.exoplayer);
