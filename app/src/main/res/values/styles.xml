@@ -6,6 +6,7 @@
     <item name="colorPrimary">@color/colorPrimary</item>
     <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
     <item name="colorAccent">@color/colorAccent</item>
+    <item name="android:listPreferredItemHeightSmall">4dp</item>
   </style>
   
   <!-- LinearLayout for Recipe/Step fragments orientation auto-select based on device rotation -->
