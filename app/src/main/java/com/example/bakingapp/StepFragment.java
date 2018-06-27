@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import com.example.bakingapp.data.Step;
 import com.example.bakingapp.utils.Options;
 import com.example.bakingapp.utils.Utils;
+import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -39,6 +41,8 @@ import com.google.android.exoplayer2.util.Util;
 public class StepFragment extends Fragment implements View.OnClickListener, Player.EventListener {
   public static final String TAG = Options.XTAG + StepFragment.class.getSimpleName();
   
+  private static final String KEY_START_POSITION = "start_pos";
+  
   public interface OnStepNavigationListener {
     void onClickPrev();
     void onClickNext();
@@ -53,6 +57,7 @@ public class StepFragment extends Fragment implements View.OnClickListener, Play
   
   private Step mStep;
   private int mListPositionFlags;
+  private long mStartPosition = C.TIME_UNSET;
   
   
   public StepFragment() {} // Unused constructor.
@@ -92,11 +97,26 @@ public class StepFragment extends Fragment implements View.OnClickListener, Play
       mNextButton.setEnabled(false);
     }
     
+    // Restore.
+    if (savedInstanceState != null) {
+      mStartPosition = savedInstanceState.getLong (KEY_START_POSITION, C.TIME_UNSET);
+    }
+    
     // Prepare ExoPlayer.
     mPlayerView.setDefaultArtwork(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher_round));
     initializePlayer();
     
     return rootView;
+  }
+  
+  
+  @Override
+  public void onSaveInstanceState (@NonNull Bundle outState) {
+    super.onSaveInstanceState(outState);
+    if (mPlayer != null) {
+      long pos = mPlayer.getContentPosition();
+      if (pos > 0) outState.putLong(KEY_START_POSITION, pos);
+    }
   }
   
   
@@ -129,6 +149,7 @@ public class StepFragment extends Fragment implements View.OnClickListener, Play
     //initMediaSession();
     
     mPlayer.prepare(mediaSource);
+    if (mStartPosition > 0) mPlayer.seekTo(mStartPosition);
     mPlayer.setPlayWhenReady(true);
     mPlayerView.hideController(); // Do not show controls on playback start,
   }
