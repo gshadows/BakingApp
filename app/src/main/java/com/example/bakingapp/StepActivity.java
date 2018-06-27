@@ -1,21 +1,21 @@
 package com.example.bakingapp;
 
-import android.support.v4.app.Fragment;
+import android.content.res.Configuration;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.WindowManager;
 
 import com.example.bakingapp.data.Step;
 import com.example.bakingapp.utils.Options;
 import com.example.bakingapp.utils.Utils;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class StepActivity extends AppCompatActivity implements StepFragment.OnStepNavigationListener  {
   public static final String TAG = Options.XTAG + StepActivity.class.getSimpleName();
-
+  
   public static final String EXTRA_STEPS        = "steps";
   public static final String EXTRA_CURRENT_STEP = "cur_step";
   
@@ -28,8 +28,16 @@ public class StepActivity extends AppCompatActivity implements StepFragment.OnSt
   @Override
   protected void onCreate (Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    
+    // Make full screen in landscape.
+    boolean isLandscape = (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE);
+    //if (isLandscape) requestWindowFeature(Window.FEATURE_NO_TITLE);
     setContentView(R.layout.activity_step);
-
+    if (isLandscape) {
+      getSupportActionBar().hide();
+      getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+    }
+    
     // Get steps list that we will work with.
     mSteps = getIntent().getParcelableArrayListExtra(EXTRA_STEPS);
     if (mSteps == null) {
@@ -48,8 +56,8 @@ public class StepActivity extends AppCompatActivity implements StepFragment.OnSt
     mStepFragment = (StepFragment)getSupportFragmentManager().findFragmentById(R.id.step_fragment);
     setFragmentStep();
   }
-
-
+  
+  
   /**
    * Set current step to the StepFragment.
    */
@@ -58,8 +66,8 @@ public class StepActivity extends AppCompatActivity implements StepFragment.OnSt
     mStepFragment.setStep(step, Utils.getListPositionFlags(mSteps, mCurrentStep));
     setTitle(step.getShortDescription());
   }
-
-
+  
+  
   /**
    * This called when user clicks "Previous Step" button in StepFragment.
    */
@@ -69,8 +77,8 @@ public class StepActivity extends AppCompatActivity implements StepFragment.OnSt
     if (mCurrentStep > 0) mCurrentStep--;
     setFragmentStep();
   }
-
-
+  
+  
   /**
    * This called when user clicks "Next Step" button in StepFragment.
    */
