@@ -1,22 +1,42 @@
 package com.example.bakingapp;
 
 import android.content.Context;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.bakingapp.data.Step;
 import com.example.bakingapp.utils.Options;
 import com.example.bakingapp.utils.Utils;
+import com.google.android.exoplayer2.DefaultLoadControl;
+import com.google.android.exoplayer2.DefaultRenderersFactory;
+import com.google.android.exoplayer2.ExoPlaybackException;
+import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.LoadControl;
+import com.google.android.exoplayer2.PlaybackParameters;
+import com.google.android.exoplayer2.Player;
+import com.google.android.exoplayer2.RenderersFactory;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.Timeline;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.source.TrackGroupArray;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
+import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
+import com.google.android.exoplayer2.util.Util;
 
 
-public class StepFragment extends Fragment implements View.OnClickListener {
+public class StepFragment extends Fragment implements View.OnClickListener, Player.EventListener {
   public static final String TAG = Options.XTAG + StepFragment.class.getSimpleName();
   
   public interface OnStepNavigationListener {
@@ -24,18 +44,20 @@ public class StepFragment extends Fragment implements View.OnClickListener {
     void onClickNext();
   }
   private OnStepNavigationListener mStepNavigationListener;
-
+  
   private PlayerView mPlayerView;
   private TextView mStepTitleTV, mStepDescTV;
-  private Button mPrevButton, mNextButton;
+  private ImageButton mPrevButton, mNextButton;
 
-  private Step mStep;
-  private int mListPosition;
+  private SimpleExoPlayer mPlayer;
   
-
+  private Step mStep;
+  private int mListPositionFlags;
+  
+  
   public StepFragment() {} // Unused constructor.
-
-
+  
+  
   @Override
   public void onAttach (Context context) {
     super.onAttach(context);
@@ -47,8 +69,8 @@ public class StepFragment extends Fragment implements View.OnClickListener {
       throw new ClassCastException(context.toString() + " must implement OnStepNavigationListener");
     }
   }
-
-
+  
+  
   @Override
   public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     final View rootView = inflater.inflate(R.layout.fragment_step, container, false);
@@ -69,11 +91,62 @@ public class StepFragment extends Fragment implements View.OnClickListener {
       mNextButton.setOnClickListener(this);
       mNextButton.setEnabled(false);
     }
-
+    
+    // Prepare ExoPlayer.
+    mPlayerView.setDefaultArtwork(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher_round));
+    initializePlayer();
+    
     return rootView;
   }
-
-
+  
+  
+  private void initializePlayer() {
+    if (mPlayer != null) return;
+    
+    RenderersFactory renderersFactory = new DefaultRenderersFactory(getContext());
+    LoadControl loadControl = new DefaultLoadControl();
+    TrackSelector trackSelector = new DefaultTrackSelector();
+    mPlayer = ExoPlayerFactory.newSimpleInstance(renderersFactory, trackSelector, loadControl);
+    mPlayerView.setPlayer(mPlayer);
+    
+    mPlayer.addListener(this);
+    mPlayer.setPlayWhenReady(false);
+  }
+  
+  
+  private void startPlaying (String mediaURL) {
+    if ((mPlayer.getPlaybackState() == Player.STATE_READY) && mPlayer.getPlayWhenReady()) {
+      mPlayer.stop();
+    }
+    
+    Context context = getContext();
+    String userAgent = Util.getUserAgent(context, context.getString(R.string.app_name));
+    
+    MediaSource mediaSource = new ExtractorMediaSource.Factory(
+        new DefaultDataSourceFactory(context, userAgent)
+    ).createMediaSource(Uri.parse(mediaURL));
+  
+    //initMediaSession();
+    
+    mPlayer.prepare(mediaSource);
+    mPlayer.setPlayWhenReady(true);
+    mPlayerView.hideController(); // Do not show controls on playback start,
+  }
+  
+  
+  @Override
+  public void onDestroy() {
+    super.onDestroy();
+    
+    // Stop and release ExoPlayer.
+    if (mPlayer != null) {
+      mPlayer.stop();
+      mPlayer.release();
+      mPlayer = null;
+    }
+  }
+  
+  
   /**
    * Called by the activity to set current step data and flags.
    * @param step Current step data to display in fragment.
@@ -82,7 +155,7 @@ public class StepFragment extends Fragment implements View.OnClickListener {
   public void setStep (Step step, int listPositionFlags) {
     Log.d(TAG, String.format("setStep() id = %d, desc = %s, flags = ", step.getId(), step.getShortDescription(), listPositionFlags));
     mStep = step;
-    mListPosition = listPositionFlags;
+    mListPositionFlags = listPositionFlags;
     
     // Set text fields.
     if (mStepTitleTV != null) mStepTitleTV.setText(step.getShortDescription());
@@ -91,9 +164,12 @@ public class StepFragment extends Fragment implements View.OnClickListener {
     // Ensure only applicable buttons active.
     if (mPrevButton != null) mPrevButton.setEnabled((listPositionFlags & Utils.LIST_POSITION_FIRST) != 0);
     if (mNextButton != null) mNextButton.setEnabled((listPositionFlags & Utils.LIST_POSITION_LAST)  != 0);
+    
+    // Start playing media.
+    startPlaying(mStep.getVideoURL());
   }
-
-
+  
+  
   /**
    * Navigatio buttons (Next Step, Previous Step) click.
    * @param v clicked view.
@@ -103,13 +179,25 @@ public class StepFragment extends Fragment implements View.OnClickListener {
     if (mStepNavigationListener == null) return;
     switch (v.getId()) {
       case R.id.prev_step_button:
-        if ((mListPosition & Utils.LIST_POSITION_FIRST) != 0) mStepNavigationListener.onClickPrev();
+        if ((mListPositionFlags & Utils.LIST_POSITION_FIRST) != 0) mStepNavigationListener.onClickPrev();
         break;
       case R.id.next_step_button:
-        if ((mListPosition & Utils.LIST_POSITION_LAST) != 0) mStepNavigationListener.onClickNext();
+        if ((mListPositionFlags & Utils.LIST_POSITION_LAST) != 0) mStepNavigationListener.onClickNext();
         break;
     }
   }
-
-
+  
+  
+  // Unused ExoPlayer callbacks.
+  @Override public void onTimelineChanged (Timeline timeline, Object manifest, int reason) {}
+  @Override public void onTracksChanged (TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {}
+  @Override public void onLoadingChanged (boolean isLoading) {}
+  @Override public void onPlayerStateChanged (boolean playWhenReady, int playbackState) {}
+  @Override public void onRepeatModeChanged (int repeatMode) {}
+  @Override public void onShuffleModeEnabledChanged (boolean shuffleModeEnabled) {}
+  @Override public void onPlayerError (ExoPlaybackException error) {}
+  @Override public void onPositionDiscontinuity (int reason) {}
+  @Override public void onPlaybackParametersChanged (PlaybackParameters playbackParameters) {}
+  @Override public void onSeekProcessed() {}
+  
 }

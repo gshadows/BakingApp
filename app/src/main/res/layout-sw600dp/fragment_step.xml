@@ -11,7 +11,7 @@
     android:id="@+id/exoplayer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_weight="1"
+    android:layout_gravity="top"
     />
   
   <TextView
@@ -26,7 +26,6 @@
     android:textSize="@dimen/step_description_size"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_weight="1"
     />
   
 </LinearLayout>
