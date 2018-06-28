@@ -10,7 +10,7 @@ import static android.support.v7.widget.RecyclerView.NO_POSITION;
 
 
 public class Utils {
-
+  
   /**
    * Convert measure code (like "TBLSP", "TSP" etc) to a human-readable format.
    * @param context Context need to access string resources.
@@ -21,8 +21,8 @@ public class Utils {
     // TODO: Convert measure to a human-readable format.
     return measure;
   }
-
-
+  
+  
   /**
    * Get first visible position for given RecyclerView.
    * @param recyclerView
@@ -36,14 +36,14 @@ public class Utils {
     if (pos == NO_POSITION) pos = lm.findFirstVisibleItemPosition(); // If all items partially invisible.
     return pos;
   }
-
-
+  
+  
   // Current step's list position.
-  public static final int LIST_POSITION_MIDDLE = 1;
+  public static final int LIST_POSITION_MIDDLE = 0;
   public static final int LIST_POSITION_FIRST  = 1;
   public static final int LIST_POSITION_LAST   = 2;
-  public static final int LIST_POSITION_ONLY   = 3;
-
+  public static final int LIST_POSITION_ONLY   = (LIST_POSITION_FIRST | LIST_POSITION_LAST);
+  
   /**
    * Detect if current list item is FIRST and/or LAST in steps list.
    * @return Corresponding flags set.
@@ -54,8 +54,6 @@ public class Utils {
     if (position >= (list.size() - 1)) flags |= LIST_POSITION_LAST;
     return flags;
   }
-
-
-
-
+  
+  
 }
