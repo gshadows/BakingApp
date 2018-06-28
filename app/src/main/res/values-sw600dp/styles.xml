@@ -1,0 +1,8 @@
+<resources>
+  
+  <!-- LinearLayout for Recipe fields orientation auto-select based on device rotation -->
+  <style name="RecipeAutoOrientation">
+    <item name="android:orientation">horizontal</item>
+  </style>
+  
+</resources>

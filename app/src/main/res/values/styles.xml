@@ -13,12 +13,12 @@
   <style name="FragmentsAutoOrientation">
     <item name="android:orientation">vertical</item>
   </style>
-
+  
   <!-- LinearLayout for Recipe fields orientation auto-select based on device rotation -->
   <style name="RecipeAutoOrientation">
-    <item name="android:orientation">horizontal</item>
+    <item name="android:orientation">vertical</item>
   </style>
-
+  
   <!-- Splitter (between fragments) orientation auto-select based on device rotation -->
   <style name="SplitterAutoOrientation">
     <item name="android:layout_width">match_parent</item>

@@ -1,15 +1,15 @@
 <resources>
-
+  
   <!-- LinearLayout for Recipe/Step fragments orientation auto-select based on device rotation -->
   <style name="FragmentsAutoOrientation">
     <item name="android:orientation">horizontal</item>
   </style>
-
+  
   <!-- LinearLayout for Recipe fields orientation auto-select based on device rotation -->
   <style name="RecipeAutoOrientation">
-    <item name="android:orientation">vertical</item>
+    <item name="android:orientation">horizontal</item>
   </style>
-
+  
   <!-- Splitter orientation auto-select based on device rotation -->
   <style name="SplitterAutoOrientation">
     <item name="android:layout_width">1dp</item>
