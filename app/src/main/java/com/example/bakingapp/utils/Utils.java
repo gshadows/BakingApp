@@ -56,4 +56,57 @@ public class Utils {
   }
   
   
+  /**
+   * Attempt to detect if the name belongs to a video file by extension.
+   * @param name File name.
+   * @return True if this file could be video.
+   */
+  public static boolean probablyVideoFile (String name) {
+    if (name.endsWith(".mp4")) return true;
+    if (name.endsWith(".mpeg")) return true;
+    if (name.endsWith(".mpeg2")) return true;
+    if (name.endsWith(".ogm")) return true;
+    if (name.endsWith(".ts")) return true;
+    if (name.endsWith(".avi")) return true;
+    if (name.endsWith(".mkv")) return true;
+    if (name.endsWith(".flv")) return true;
+    if (name.endsWith(".webm")) return true;
+    return false;
+  }
+  
+  
+  /**
+   * Attempt to detect if the name belongs to a audio file by extension.
+   * @param name File name.
+   * @return True if this file could be audio.
+   */
+  public static boolean probablyAudioFile (String name) {
+    if (name.endsWith(".mp3")) return true;
+    if (name.endsWith(".wav")) return true;
+    if (name.endsWith(".ogg")) return true;
+    if (name.endsWith(".ac3")) return true;
+    if (name.endsWith(".asf")) return true;
+    if (name.endsWith(".wma")) return true;
+    if (name.endsWith(".flac")) return true;
+    return false;
+  }
+  
+  
+  /**
+   * Attempt to detect if the name belongs to a image file by extension.
+   * @param name File name.
+   * @return True if this file could be image.
+   */
+  public static boolean probablyImageFile (String name) {
+    if (name.endsWith(".jpg")) return true;
+    if (name.endsWith(".jpeg")) return true;
+    if (name.endsWith(".gif")) return true;
+    if (name.endsWith(".png")) return true;
+    if (name.endsWith(".bmp")) return true;
+    if (name.endsWith(".tif")) return true;
+    if (name.endsWith(".tiff")) return true;
+    if (name.endsWith(".webp")) return true;
+    return false;
+  }
+  
 }

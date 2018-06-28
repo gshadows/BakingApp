@@ -1,11 +1,8 @@
 package com.example.bakingapp.adapters;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,14 +10,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.Target;
 import com.example.bakingapp.R;
 import com.example.bakingapp.data.Step;
 import com.example.bakingapp.utils.Options;
+import com.example.bakingapp.utils.Utils;
 
 import java.util.List;
 
@@ -62,16 +56,28 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepHolder> 
     Step step = mSteps.get(position);
     
     holder.mNameTV.setText(step.getShortDescription());
+  
+    // Get image URL and check it.
+    String image = step.getThumbnailURL();
+    if (image != null) {
+      if (image.isEmpty() || Utils.probablyVideoFile(image) || Utils.probablyAudioFile(image)) image = null;
+    }
+    if (image == null) {
+      // Second chance - if it was swapped with video URL.
+      image = step.getVideoURL();
+      if (image != null) {
+        if (image.isEmpty() || Utils.probablyVideoFile(image) || Utils.probablyAudioFile(image)) image = null;
+      }
+    }
     
     // Set step preview image. Use app logo if no image available.
-    String thumbnail = step.getThumbnailURL();
-    if ((thumbnail != null) && !thumbnail.isEmpty()) {
+    if (image != null) {
       Glide.with(holder.mImageIV)
-          .load(thumbnail)
+          .load(image)
           .apply(mRequestOptions)
           .into(holder.mImageIV);
     } else {
-      // Don't waste time.
+      // Do not waste time calling Glide for null.
       holder.mImageIV.setImageResource(R.mipmap.ic_launcher);
     }
   }

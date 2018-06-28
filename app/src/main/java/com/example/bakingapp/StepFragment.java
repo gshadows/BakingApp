@@ -186,8 +186,38 @@ public class StepFragment extends Fragment implements View.OnClickListener, Play
     if (mPrevButton != null) mPrevButton.setEnabled((listPositionFlags & Utils.LIST_POSITION_FIRST) != 0);
     if (mNextButton != null) mNextButton.setEnabled((listPositionFlags & Utils.LIST_POSITION_LAST)  != 0);
     
+    // Get media (video or audio) URL and check it.
+    String media = step.getVideoURL();
+    String other = null; // Fallback (probably image). I assume ExoPlayer is able to load images.
+    if (media != null) {
+      if (media.isEmpty()) {
+        // No video URL.
+        media = null;
+      } else {
+        // We have some video URL. Save it as fallback.
+        other = media;
+        if (Utils.probablyImageFile(media)) media = null;
+      }
+    }
+    if (media == null) {
+      // Second chance - if it was swapped with thumbnail URL.
+      media = step.getThumbnailURL();
+      if (media != null) {
+        if (media.isEmpty()) {
+          // No thumbnail URL.
+          media = other;
+        } else {
+          // We have some thumbnail URL.
+          if (Utils.probablyImageFile(media)) media = (other == null) ? media : other; // Between two images prefer "video" image.
+        }  
+      } else {
+        // Fallback to a probably image (or to a null if no any URLs exists).
+        media = other;
+      }
+    }
+    
     // Start playing media.
-    startPlaying(mStep.getVideoURL());
+    if (media != null) startPlaying(media);
   }
   
   
