@@ -1,15 +1,18 @@
 package com.example.bakingapp;
 
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 
 import com.example.bakingapp.data.Recipe;
 import com.example.bakingapp.data.Step;
 import com.example.bakingapp.utils.Options;
 import com.example.bakingapp.utils.Utils;
+import com.example.bakingapp.widget.IngredientsWidget;
 
 import java.util.List;
 
@@ -63,7 +66,10 @@ public class RecipeActivity extends AppCompatActivity
     // Pass current step to the corresponding fragment.
     if (mIsTwoPane) setFragmentStep();
     
-    // TODO: Update widget's recipe with current one.
+    // Update widget's recipe with current one.
+    final AppWidgetManager manager = AppWidgetManager.getInstance(this);
+    int[] appWidgetIds = manager.getAppWidgetIds(new ComponentName(this, IngredientsWidget.class));
+    IngredientsWidget.updateAllWidgets(this, manager, appWidgetIds, mRecipe);
   }
 
 

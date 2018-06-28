@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
   
-  <!-- Main activity: recipes list grid --> 
+  <!-- Main activity: recipes list grid -->
   <integer name="grid_columns">2</integer>
   <dimen name="grid_image_size">128dp</dimen>
   <dimen name="grid_recipe_name_size">20sp</dimen>
   <dimen name="grid_recipe_padding">4dp</dimen>
-
+  
   <!-- Recipe fragment -->
   <dimen name="recipe_ingredients_header_size">20sp</dimen>
   
@@ -19,5 +19,8 @@
   <!-- Step fragment -->
   <dimen name="step_title_size">24sp</dimen>
   <dimen name="step_description_size">16sp</dimen>
-
+  
+  <!-- Widget -->
+  <dimen name="widget_margin">8dp</dimen>
+  
 </resources>
