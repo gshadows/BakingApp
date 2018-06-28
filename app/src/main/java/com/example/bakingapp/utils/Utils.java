@@ -1,8 +1,13 @@
 package com.example.bakingapp.utils;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+
+import com.example.bakingapp.R;
+import com.example.bakingapp.data.Ingredient;
 
 import java.util.List;
 
@@ -10,6 +15,8 @@ import static android.support.v7.widget.RecyclerView.NO_POSITION;
 
 
 public class Utils {
+  public static final String TAG = Options.XTAG + Utils.class.getSimpleName();
+  
   
   /**
    * Convert measure code (like "TBLSP", "TSP" etc) to a human-readable format.
@@ -20,6 +27,29 @@ public class Utils {
   public static String makeHumanReadableMeasureString (Context context, String measure) {
     // TODO: Convert measure to a human-readable format.
     return measure;
+  }
+  
+  
+  /**
+   * Create ingredient description line using given Ingredient data structure.
+   * @param context    Context need to access string resources.
+   * @param ingredient Ingredient object.
+   * @return Generated string.
+   */
+  public static @NonNull String getIngredientLine (@NonNull Context context, @NonNull Ingredient ingredient) {
+    // Prepare measurement string.
+    String measure = Utils.makeHumanReadableMeasureString(context, ingredient.getMeasure());
+    Log.d(TAG, "Measure " + ingredient.getMeasure() + " -> " + measure);
+    
+    // Ensure 1st character in upper case.
+    String ingName = ingredient.getIngredient();
+    if (Character.isLowerCase(ingName.charAt(0))) {
+      char[] chars = ingName.toCharArray();
+      chars[0] = Character.toUpperCase(chars[0]);
+      ingName = String.valueOf(chars);
+    }
+    
+    return context.getString (R.string.ingredient_line_format, ingName, ingredient.getQuantity(), measure);
   }
   
   

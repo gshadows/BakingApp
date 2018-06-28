@@ -4,5 +4,6 @@
   <string name="ingredients">Ingredients:</string>
   <string name="network_error">Network error</string>
   <string name="bad_server_response">Bad server response: %d</string>
-  
+  <string name="ingredient_line_format">• %s: %.2f %s</string>
+
 </resources>

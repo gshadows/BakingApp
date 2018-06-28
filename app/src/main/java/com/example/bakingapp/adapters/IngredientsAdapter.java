@@ -3,7 +3,6 @@ package com.example.bakingapp.adapters;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,11 +18,11 @@ import java.util.List;
 public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.RecipeHolder> {
   public static final String TAG = Options.XTAG + IngredientsAdapter.class.getSimpleName();
   
-  private Context mContext;
+  private @NonNull Context mContext;
   private List<Ingredient> mIngredients;
   
   
-  public IngredientsAdapter (Context context) {
+  public IngredientsAdapter (@NonNull Context context) {
     mContext = context;
   }
   
@@ -38,24 +37,9 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
   
   @Override
   public void onBindViewHolder (@NonNull RecipeHolder holder, int position) {
-    
     if ((mIngredients == null) || (mIngredients.size() < position)) return;
     final Ingredient ingredient = mIngredients.get(position);
-    
-    // Prepare measurement string.
-    String measure = Utils.makeHumanReadableMeasureString(mContext, ingredient.getMeasure());
-    Log.d(TAG, "Measure " + ingredient.getMeasure() + " -> " + measure);
-    
-    // Ensure 1st character in upper case.
-    String ingName = ingredient.getIngredient();
-    if (Character.isLowerCase(ingName.charAt(0))) {
-      char[] chars = ingName.toCharArray();
-      chars[0] = Character.toUpperCase(chars[0]);
-      ingName = String.valueOf(chars);
-    }
-    
-    String text = String.format("\u2022 %s: %.2f %s", ingName, ingredient.getQuantity(), measure);
-    holder.mTextTV.setText(text);
+    if (ingredient != null) holder.mTextTV.setText(Utils.getIngredientLine(mContext, ingredient));
   }
 
 
