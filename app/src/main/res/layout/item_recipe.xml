@@ -26,5 +26,5 @@
     android:textSize="@dimen/grid_recipe_name_size"
     tools:text="Chocolate Pie"
     />
-
+  
 </LinearLayout>

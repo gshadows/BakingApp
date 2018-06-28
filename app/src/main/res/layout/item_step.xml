@@ -28,5 +28,5 @@
     android:layout_gravity="center_vertical"
     tools:text="Press the crust into baking form."
     />
-
+  
 </LinearLayout>
