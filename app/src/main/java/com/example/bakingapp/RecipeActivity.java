@@ -53,6 +53,7 @@ public class RecipeActivity extends AppCompatActivity
       Log.e(TAG, "Started without recipe extra");
       finish(); return;
     }
+    Log.d(TAG, "Started with recipe: " + mRecipe.getName());
     setTitle(mRecipe.getName());
     
     // Restore previous state.
@@ -69,6 +70,7 @@ public class RecipeActivity extends AppCompatActivity
     // Update widget's recipe with current one.
     final AppWidgetManager manager = AppWidgetManager.getInstance(this);
     int[] appWidgetIds = manager.getAppWidgetIds(new ComponentName(this, IngredientsWidget.class));
+    Log.d(TAG, "onCreate() updating widgets in manager " + manager + " and IDs count " + ((appWidgetIds == null) ? -1 : appWidgetIds.length));
     IngredientsWidget.updateAllWidgets(this, manager, appWidgetIds, mRecipe);
   }
 
