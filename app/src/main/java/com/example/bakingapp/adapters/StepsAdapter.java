@@ -77,7 +77,7 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepHolder> 
           .into(holder.mImageIV);
     } else {
       // Do not waste time calling Glide for null.
-      holder.mImageIV.setImageResource(R.mipmap.ic_launcher);
+      holder.mImageIV.setImageResource(R.drawable.fallback_image);
     }
   }
   

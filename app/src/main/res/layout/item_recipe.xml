@@ -15,7 +15,7 @@
     android:layout_width="@dimen/grid_image_size"
     android:layout_height="@dimen/grid_image_size"
     android:scaleType="centerCrop"
-    tools:src="@mipmap/ic_launcher"
+    tools:src="@drawable/fallback_image"
     />
   
   <TextView

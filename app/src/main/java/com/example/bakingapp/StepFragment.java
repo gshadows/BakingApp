@@ -103,7 +103,7 @@ public class StepFragment extends Fragment implements View.OnClickListener, Play
     }
     
     // Prepare ExoPlayer.
-    mPlayerView.setDefaultArtwork(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher_round));
+    mPlayerView.setDefaultArtwork(BitmapFactory.decodeResource(getResources(), R.drawable.fallback_image));
     initializePlayer();
     
     return rootView;

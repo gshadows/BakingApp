@@ -31,7 +31,7 @@ public class IngredientsWidget extends AppWidgetProvider {
   private static void updateAppWidget (Context context, AppWidgetManager manager, int appWidgetId, Recipe recipe) {
     Log.d(TAG, "updateAppWidget() recipe: " + recipeName(mRecipe) + " -> " + recipeName(recipe));
     if (recipe != null) mRecipe = recipe;
-  
+    
     // Construct the RemoteViews object
     RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_ingredients);
     

@@ -14,7 +14,7 @@
     android:layout_width="@dimen/step_item_image_size"
     android:layout_height="@dimen/step_item_image_size"
     android:scaleType="centerCrop"
-    tools:src="@mipmap/ic_launcher"
+    tools:src="@drawable/fallback_image"
     />
   
   <TextView

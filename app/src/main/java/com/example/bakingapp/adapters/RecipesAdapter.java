@@ -71,7 +71,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipeHo
           .into(holder.mImageIV);
     } else {
       // Do not waste time calling Glide for null.
-      holder.mImageIV.setImageResource(R.mipmap.ic_launcher);
+      holder.mImageIV.setImageResource(R.drawable.fallback_image);
     }
   }
   
