@@ -7,12 +7,8 @@ import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
-import com.example.bakingapp.data.Ingredient;
-import com.example.bakingapp.data.Recipe;
 import com.example.bakingapp.utils.Options;
 import com.example.bakingapp.utils.Utils;
-
-import java.util.ArrayList;
 
 
 public class IngredientsWidgetService extends RemoteViewsService {
@@ -21,7 +17,6 @@ public class IngredientsWidgetService extends RemoteViewsService {
   
   
   @Override public RemoteViewsFactory onGetViewFactory (Intent intent) {
-    Log.d(IngredientsWidgetService.class.getSimpleName(), "onGetViewFactory()");
     return new IngredientsListRVFactory(getApplicationContext(), intent);
   }
   
@@ -35,13 +30,13 @@ public class IngredientsWidgetService extends RemoteViewsService {
     
     
     private Context mContext;
-    private Recipe  mRecipe;
+    private String[] mIngredients;
     
     
     public IngredientsListRVFactory (@NonNull Context context, Intent intent) {
       mContext = context;
-      mRecipe = intent.getParcelableExtra(EXTRA_INGREDIENTS);
-      Log.d(TAG, "IngredientsListRVFactory ctor() intent recipe: " + ((mRecipe == null) ? "(null)" : mRecipe.getName()));
+      mIngredients = Utils.deserializeIngredients(intent.getStringExtra(EXTRA_INGREDIENTS));
+      Log.d(TAG, "IngredientsListRVFactory ctor() intent ingredients size: " + ((mIngredients == null) ? "(null)" : mIngredients.length));
     }
     
     
@@ -52,9 +47,9 @@ public class IngredientsWidgetService extends RemoteViewsService {
       RemoteViews views = new RemoteViews(mContext.getPackageName(), android.R.layout.simple_list_item_1);
       
       // Get ingredients ling.
-      if ((position >= 0) && (position < mRecipe.getIngredients().size())) {
-        Log.d(TAG, "getViewAt() set text to: " + mRecipe.getIngredients().get(position));
-        views.setTextViewText(android.R.id.text1, Utils.getIngredientLine(mContext, mRecipe.getIngredients().get(position)));
+      if ((position >= 0) && (position < mIngredients.length)) {
+        Log.d(TAG, "getViewAt() set text to: " + mIngredients[position]);
+        views.setTextViewText(android.R.id.text1, mIngredients[position]);
       } else {
         Log.e(TAG, "getViewAt() position out of range");
       }
@@ -65,13 +60,12 @@ public class IngredientsWidgetService extends RemoteViewsService {
     
     @Override
     public int getCount() {
-      if (mRecipe == null) {
-        Log.w(TAG, "getCount() returns 0 because mRecips is null");
+      if (mIngredients == null) {
+        Log.w(TAG, "getCount() returns 0 because mIngredients is null");
         return 0;
       }
-      ArrayList<Ingredient> ingredients = mRecipe.getIngredients();
-      Log.d(TAG, "getCount() returns " + ((ingredients == null) ? 0 : ingredients.size()));
-      return (ingredients == null) ? 0 : ingredients.size();
+      Log.d(TAG, "getCount() returns " + ((mIngredients == null) ? 0 : mIngredients.length));
+      return (mIngredients == null) ? 0 : mIngredients.length;
     }
     
     

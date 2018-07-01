@@ -13,6 +13,7 @@ import com.example.bakingapp.R;
 import com.example.bakingapp.RecipeActivity;
 import com.example.bakingapp.data.Recipe;
 import com.example.bakingapp.utils.Options;
+import com.example.bakingapp.utils.Utils;
 
 /**
  * Implementation of App Widget functionality.
@@ -41,7 +42,8 @@ public class IngredientsWidget extends AppWidgetProvider {
       
       // Set IngredientsWidgetService to provide views for ListView.
       Intent serviceIntent = new Intent(context, IngredientsWidgetService.class);
-      serviceIntent.putParcelableArrayListExtra(IngredientsWidgetService.EXTRA_INGREDIENTS, mRecipe.getIngredients());
+      String ingredientsSerialized = Utils.serializeIngredients(context, mRecipe.getIngredients());
+      serviceIntent.putExtra(IngredientsWidgetService.EXTRA_INGREDIENTS, ingredientsSerialized);
       views.setRemoteAdapter(R.id.widget_listview, serviceIntent);
       
       // Set list view click intent.

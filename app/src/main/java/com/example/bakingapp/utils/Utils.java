@@ -9,6 +9,7 @@ import android.util.Log;
 import com.example.bakingapp.R;
 import com.example.bakingapp.data.Ingredient;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static android.support.v7.widget.RecyclerView.NO_POSITION;
@@ -16,6 +17,12 @@ import static android.support.v7.widget.RecyclerView.NO_POSITION;
 
 public class Utils {
   public static final String TAG = Options.XTAG + Utils.class.getSimpleName();
+  
+  /**
+   * [de]serealization splitter character.
+   * Even if this char appears in input String it could be safely dropped because it is invalid :)
+   */
+  private static final String SECRET_CHAR = "\uFFFF";
   
   
   /**
@@ -50,6 +57,38 @@ public class Utils {
     }
     
     return context.getString (R.string.ingredient_line_format, ingName, ingredient.getQuantity(), measure);
+  }
+  
+  
+  /**
+   * This is used to pass ingredients list to the widget.
+   * Because every ingredient is finally just a formatted string (@see getIngredientLine) it is
+   * easy to concatenate all strings.
+   * @param context     Context need to access string resources.
+   * @param ingredients Ingredient list to serialize.
+   * @return Serialized ingredients String concatenated with special character.
+   */
+  public static @NonNull String serializeIngredients (@NonNull Context context, ArrayList<Ingredient> ingredients) {
+    if ((ingredients == null) || (ingredients.size() < 1)) return "";
+    StringBuilder sb = new StringBuilder();
+    for (Ingredient ingredient : ingredients) {
+      sb.append(getIngredientLine(context, ingredient).replaceAll(SECRET_CHAR, ""));
+      sb.append(SECRET_CHAR);
+    }
+    return sb.toString();
+  }
+  
+  
+  /**
+   * This is used to pass ingredients list to the widget.
+   * Because every ingredient is finally just a formatted string (@see getIngredientLine) it is
+   * easy to concatenate all strings.
+   * @param str Serialized ingredients String concatenated with special character.
+   * @return Deserialized array of ingredients strings.
+   */
+  public static @NonNull String[] deserializeIngredients (String str) {
+    if ((str == null) || (str.length() < 1)) return null;
+    return str.split(SECRET_CHAR);
   }
   
   
