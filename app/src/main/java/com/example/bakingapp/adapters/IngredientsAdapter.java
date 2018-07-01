@@ -41,8 +41,8 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
     final Ingredient ingredient = mIngredients.get(position);
     if (ingredient != null) holder.mTextTV.setText(Utils.getIngredientLine(mContext, ingredient));
   }
-
-
+  
+  
   @Override
   public int getItemCount() {
     return (mIngredients != null) ? mIngredients.size() : 0;

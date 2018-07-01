@@ -26,22 +26,17 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipeHo
   
   private Context mContext;
   private OnClickListener mOnClickListener;
-
+  
   private ArrayList<Recipe> mRecipes;
   private RequestOptions mRequestOptions;
   
-
+  
   public RecipesAdapter (Context context, OnClickListener listener) {
     mContext = context;
     mRequestOptions = new RequestOptions()
-        .error(R.mipmap.ic_launcher_round)
-        .placeholder(R.mipmap.ic_launcher_round)
-        //.centerCrop()
-        //.centerInside()
-        //.fitCenter()
-        //.circleCrop()
-    ;
-
+        .error(R.drawable.fallback_image)
+        .placeholder(R.drawable.fallback_image);
+    
     mOnClickListener = listener;
   }
   
@@ -67,7 +62,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipeHo
     if (image != null) {
       if (image.isEmpty() || Utils.probablyVideoFile(image) || Utils.probablyAudioFile(image)) image = null;
     }
-  
+    
     // Set recipe preview image. Use app logo if no image available.
     if (image != null) {
       Glide.with(holder.mImageIV)
@@ -79,8 +74,8 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipeHo
       holder.mImageIV.setImageResource(R.mipmap.ic_launcher);
     }
   }
-
-
+  
+  
   @Override
   public int getItemCount() {
     return (mRecipes != null) ? mRecipes.size() : 0;
