@@ -25,18 +25,6 @@ public class Utils {
   
   
   /**
-   * Convert measure code (like "TBLSP", "TSP" etc) to a human-readable format.
-   * @param context Context need to access string resources.
-   * @param measure Original short measure code.
-   * @return Human-readabe measure name.
-   */
-  public static String makeHumanReadableMeasureString (Context context, String measure) {
-    // TODO: Convert measure to a human-readable format.
-    return measure;
-  }
-  
-  
-  /**
    * Create ingredient description line using given Ingredient data structure.
    * @param context    Context need to access string resources.
    * @param ingredient Ingredient object.
@@ -44,8 +32,7 @@ public class Utils {
    */
   public static @NonNull String getIngredientLine (@NonNull Context context, @NonNull Ingredient ingredient) {
     // Prepare measurement string.
-    String measure = Utils.makeHumanReadableMeasureString(context, ingredient.getMeasure());
-    //Log.d(TAG, "Measure " + ingredient.getMeasure() + " -> " + measure);
+    String measure = ingredient.getMeasure().toLowerCase();
     
     // Ensure 1st character in upper case.
     String ingName = ingredient.getIngredient();
