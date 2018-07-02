@@ -45,8 +45,8 @@ public class IngredientsWidget extends AppWidgetProvider {
     }
     
     // Save ingredients from current recipe.
-    Log.d(TAG, "Saving ingredients to shared preferences.");
     String ingredientsSerialized = Utils.serializeIngredients(context, recipe.getIngredients());
+    Log.d(TAG, "Saving ingredients to shared preferences: " + ingredientsSerialized);
     sharedPrefs.edit().putString(Options.KEY_INGREDIENTS, ingredientsSerialized).apply();
   }
   
@@ -65,6 +65,7 @@ public class IngredientsWidget extends AppWidgetProvider {
     {
       // Set IngredientsWidgetService to provide views for ListView.
       Intent serviceIntent = new Intent(context, IngredientsWidgetService.class);
+      //serviceIntent.setData(Uri.parse(serviceIntent.toUri(Intent.URI_INTENT_SCHEME))); -- this need if passing extras as @worric said to ensure widget will be updated,
       views.setRemoteAdapter(R.id.widget_listview, serviceIntent);
     }
     
@@ -75,7 +76,8 @@ public class IngredientsWidget extends AppWidgetProvider {
       Intent activityIntent = new Intent(context, RecipeActivity.class);
       activityIntent.putExtra(RecipeActivity.EXTRA_RECIPE, mRecipe);
       PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, activityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-      views.setOnClickPendingIntent(R.id.widget_listview, pendingIntent);
+      //views.setOnClickPendingIntent(R.id.widget_listview, pendingIntent);
+      views.setPendingIntentTemplate(R.id.widget_listview, pendingIntent);
     } else {
       Log.d(TAG, "updateAppWidget() w/o recipe");
       Intent activityIntent = new Intent(context, MainActivity.class);

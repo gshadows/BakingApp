@@ -66,7 +66,8 @@ public class IngredientsWidgetService extends RemoteViewsService {
       } else {
         Log.e(TAG, "getViewAt() position out of range");
       }
-      
+  
+      views.setOnClickFillInIntent(android.R.id.text1, new Intent());
       return views;
     }
     
