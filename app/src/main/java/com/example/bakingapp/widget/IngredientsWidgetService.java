@@ -9,6 +9,7 @@ import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
+import com.example.bakingapp.R;
 import com.example.bakingapp.utils.Options;
 import com.example.bakingapp.utils.Utils;
 
@@ -57,7 +58,7 @@ public class IngredientsWidgetService extends RemoteViewsService {
     public RemoteViews getViewAt (int position) {
       Log.d(TAG, "getViewAt() " + position);
       // Create RemoteViews for the grid cell layout.
-      RemoteViews views = new RemoteViews(mContext.getPackageName(), android.R.layout.simple_list_item_1);
+      RemoteViews views = new RemoteViews(mContext.getPackageName(), R.layout.item_ingredient);
       
       // Get ingredients ling.
       if ((position >= 0) && (position < mIngredients.length)) {

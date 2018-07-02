@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.bakingapp.R;
 import com.example.bakingapp.data.Ingredient;
 import com.example.bakingapp.utils.Options;
 import com.example.bakingapp.utils.Utils;
@@ -30,7 +31,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
   @NonNull
   @Override
   public RecipeHolder onCreateViewHolder (@NonNull ViewGroup parent, int viewType) {
-    View view = LayoutInflater.from(mContext).inflate(android.R.layout.simple_list_item_1, parent, false);
+    View view = LayoutInflater.from(mContext).inflate(R.layout.item_ingredient, parent, false);
     return new RecipeHolder(view);
   }
   

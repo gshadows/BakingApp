@@ -29,7 +29,7 @@
       android:layout_height="match_parent"
       android:background="@color/colorPrimaryDark"
       app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-      tools:listitem="@android:layout/simple_list_item_1"
+      tools:listitem="@layout/item_ingredient"
       />
     
   </LinearLayout>
