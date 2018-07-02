@@ -5,6 +5,9 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.RemoteViews;
 
@@ -22,40 +25,59 @@ public class IngredientsWidget extends AppWidgetProvider {
   
   public static final String TAG = Options.XTAG + IngredientsWidget.class.getSimpleName();
   
-  
   private static Recipe mRecipe = null;
   
   
   private static String recipeName (Recipe recipe) { return (recipe == null) ? "(null)" : recipe.getName(); }
   
   
+  /**
+   * Serialize and save ingredients list to a shared preferences.
+   * @param context Context to access shared preferences.
+   * @param recipe  Recipe to get ingredients from.
+   */
+  private static void saveIngredients(@NonNull Context context, @NonNull Recipe recipe) {
+    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+    if (sharedPrefs == null) {
+      // Something really bad.
+      Log.e(TAG, "SharedPreferences is null!");
+      return;
+    }
+    
+    // Save ingredients from current recipe.
+    Log.d(TAG, "Saving ingredients to shared preferences.");
+    String ingredientsSerialized = Utils.serializeIngredients(context, recipe.getIngredients());
+    sharedPrefs.edit().putString(Options.KEY_INGREDIENTS, ingredientsSerialized).apply();
+  }
+  
+  
   private static void updateAppWidget (Context context, AppWidgetManager manager, int appWidgetId, Recipe recipe) {
     Log.d(TAG, "updateAppWidget() recipe: " + recipeName(mRecipe) + " -> " + recipeName(recipe));
-    if (recipe != null) mRecipe = recipe;
+    if (recipe != null) {
+      mRecipe = recipe;
+      saveIngredients(context, recipe);
+    }
     
     // Construct the RemoteViews object
     RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_ingredients);
     
-    // Setup ingredients ListView.
-    if (mRecipe != null) {
-      Log.d(TAG, "updateAppWidget() recipe: " + mRecipe.getName());
-      
+    // Setup ingredients ListView service.
+    {
       // Set IngredientsWidgetService to provide views for ListView.
       Intent serviceIntent = new Intent(context, IngredientsWidgetService.class);
-      String ingredientsSerialized = Utils.serializeIngredients(context, mRecipe.getIngredients());
-      serviceIntent.putExtra(IngredientsWidgetService.EXTRA_INGREDIENTS, ingredientsSerialized);
       views.setRemoteAdapter(R.id.widget_listview, serviceIntent);
-      
+    }
+    
+    // Setup widget click activity.
+    if (mRecipe != null) {
       // Set list view click intent.
+      Log.d(TAG, "updateAppWidget() recipe: " + mRecipe.getName());
       Intent activityIntent = new Intent(context, RecipeActivity.class);
       activityIntent.putExtra(RecipeActivity.EXTRA_RECIPE, mRecipe);
       PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, activityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
       views.setOnClickPendingIntent(R.id.widget_listview, pendingIntent);
-      
     } else {
-      
       Log.d(TAG, "updateAppWidget() w/o recipe");
-      
       Intent activityIntent = new Intent(context, MainActivity.class);
       PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, activityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
       views.setOnClickPendingIntent(R.id.widget_fallback, pendingIntent);

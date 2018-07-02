@@ -2,6 +2,8 @@ package com.example.bakingapp.widget;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.widget.RemoteViews;
@@ -13,11 +15,8 @@ import com.example.bakingapp.utils.Utils;
 
 public class IngredientsWidgetService extends RemoteViewsService {
   
-  public static final String EXTRA_INGREDIENTS = "ingredients";
-  
-  
   @Override public RemoteViewsFactory onGetViewFactory (Intent intent) {
-    return new IngredientsListRVFactory(getApplicationContext(), intent);
+    return new IngredientsListRVFactory(getApplicationContext());
   }
   
   
@@ -33,10 +32,24 @@ public class IngredientsWidgetService extends RemoteViewsService {
     private String[] mIngredients;
     
     
-    public IngredientsListRVFactory (@NonNull Context context, Intent intent) {
+    public IngredientsListRVFactory (@NonNull Context context) {
+      //Log.d(TAG, "ctor()");
       mContext = context;
-      mIngredients = Utils.deserializeIngredients(intent.getStringExtra(EXTRA_INGREDIENTS));
-      Log.d(TAG, "IngredientsListRVFactory ctor() intent ingredients size: " + ((mIngredients == null) ? "(null)" : mIngredients.length));
+      //onDataSetChanged(); // Attempt to restore from shared preferences.
+    }
+  
+  
+    @Override public void onDataSetChanged() {
+      SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+      if (sharedPrefs == null) {
+        Log.e(TAG, "SharedPreferences in null!");
+        return;
+      }
+  
+      String ingredientsSerialized = sharedPrefs.getString(Options.KEY_INGREDIENTS, null);
+      Log.d(TAG, "onDataSetChanged() ingredients restored: " + ingredientsSerialized);
+      mIngredients = Utils.deserializeIngredients(ingredientsSerialized);
+      Log.d(TAG, "onDataSetChanged() intent ingredients size: " + ((mIngredients == null) ? "(null)" : mIngredients.length));
     }
     
     
@@ -69,7 +82,6 @@ public class IngredientsWidgetService extends RemoteViewsService {
     }
     
     
-    @Override public void         onDataSetChanged() {}
     @Override public void         onCreate() {}
     @Override public void         onDestroy() {}
     @Override public RemoteViews  getLoadingView()          { return null; }

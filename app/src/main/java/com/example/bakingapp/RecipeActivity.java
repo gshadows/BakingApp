@@ -23,7 +23,7 @@ public class RecipeActivity extends AppCompatActivity
   
   // Saved activity state keys.
   private static final String KEY_CURRENT_STEP = "cur_step";
-
+  
   public static final String EXTRA_RECIPE = "recipe";
   
   private RecipeFragment mRecipeFragment;
@@ -72,9 +72,10 @@ public class RecipeActivity extends AppCompatActivity
     int[] appWidgetIds = manager.getAppWidgetIds(new ComponentName(this, IngredientsWidget.class));
     Log.d(TAG, "onCreate() updating widgets in manager " + manager + " and IDs count " + ((appWidgetIds == null) ? -1 : appWidgetIds.length));
     IngredientsWidget.updateAllWidgets(this, manager, appWidgetIds, mRecipe);
+    manager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_listview);
   }
-
-
+  
+  
   /**
    * This called when user clicks step in ths steps list.
    * *) In case of Master-Detail activity we should select new step in StepFragment.

@@ -8,4 +8,7 @@ public class Options {
   
   public static final String XTAG = "XXX-"; // Global tag prefix to filter only my own logs in logcat.
   
+  
+  public static final String KEY_INGREDIENTS = "ingredients";
+  
 }

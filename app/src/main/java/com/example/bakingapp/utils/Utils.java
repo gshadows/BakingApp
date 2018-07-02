@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 
 import com.example.bakingapp.R;
 import com.example.bakingapp.data.Ingredient;
@@ -46,7 +45,7 @@ public class Utils {
   public static @NonNull String getIngredientLine (@NonNull Context context, @NonNull Ingredient ingredient) {
     // Prepare measurement string.
     String measure = Utils.makeHumanReadableMeasureString(context, ingredient.getMeasure());
-    Log.d(TAG, "Measure " + ingredient.getMeasure() + " -> " + measure);
+    //Log.d(TAG, "Measure " + ingredient.getMeasure() + " -> " + measure);
     
     // Ensure 1st character in upper case.
     String ingName = ingredient.getIngredient();
@@ -86,7 +85,7 @@ public class Utils {
    * @param str Serialized ingredients String concatenated with special character.
    * @return Deserialized array of ingredients strings.
    */
-  public static @NonNull String[] deserializeIngredients (String str) {
+  public static String[] deserializeIngredients (String str) {
     if ((str == null) || (str.length() < 1)) return null;
     return str.split(SECRET_CHAR);
   }
