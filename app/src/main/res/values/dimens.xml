@@ -9,6 +9,7 @@
   
   <!-- Recipe fragment -->
   <dimen name="recipe_ingredients_header_size">20sp</dimen>
+  <dimen name="ingredient_item_name_size">16sp</dimen>
   
   <!-- Recipe fragment -> Step RV item -->
   <dimen name="step_item_padding">8dp</dimen>

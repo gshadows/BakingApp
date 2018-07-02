@@ -5,4 +5,7 @@
   <integer name="grid_columns">3</integer>
   <dimen name="grid_recipe_name_size">24sp</dimen>
   
+  <!-- Ingredients list -->
+  <dimen name="ingredient_item_name_size">20sp</dimen>
+
 </resources>
