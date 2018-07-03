@@ -22,6 +22,6 @@
   <dimen name="step_description_size">16sp</dimen>
   
   <!-- Widget -->
-  <dimen name="widget_margin">8dp</dimen>
+  <dimen name="widget_margin">0dp</dimen>
   
 </resources>

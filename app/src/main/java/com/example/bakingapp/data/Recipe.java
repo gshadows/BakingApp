@@ -32,14 +32,14 @@ public class Recipe implements Parcelable {
     servings = in.readInt();
     name = in.readString();
     if (in.readByte() == 0x01) {
-      ingredients = new ArrayList<Ingredient>();
+      ingredients = new ArrayList<>();
       in.readList(ingredients, Ingredient.class.getClassLoader());
     } else {
       ingredients = null;
     }
     id = in.readInt();
     if (in.readByte() == 0x01) {
-      steps = new ArrayList<Step>();
+      steps = new ArrayList<>();
       in.readList(steps, Step.class.getClassLoader());
     } else {
       steps = null;

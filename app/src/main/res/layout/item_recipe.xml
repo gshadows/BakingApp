@@ -15,6 +15,7 @@
     android:layout_width="@dimen/grid_image_size"
     android:layout_height="@dimen/grid_image_size"
     android:scaleType="centerCrop"
+    android:contentDescription="@string/recipe_preview_image"
     tools:src="@drawable/fallback_image"
     />
   

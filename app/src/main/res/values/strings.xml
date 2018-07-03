@@ -5,5 +5,12 @@
   <string name="network_error">Network error</string>
   <string name="bad_server_response">Bad server response: %d</string>
   <string name="ingredient_line_format">• %s: %.2f %s</string>
+  
+  <!-- contentDescription strings -->
+  <string name="recipe_preview_image">Recipe preview image</string>
+  <string name="step_preview_image">Step preview image</string>
+  <string name="no_recipe_selected">No recipe selected in Baking App</string>
+  <string name="previous_step">Previous step</string>
+  <string name="next_step">Next step</string>
 
 </resources>
