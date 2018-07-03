@@ -1,10 +1,12 @@
 package com.example.bakingapp;
 
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
+import android.support.test.espresso.IdlingResource;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.Toast;
@@ -13,6 +15,7 @@ import com.example.bakingapp.adapters.RecipesAdapter;
 import com.example.bakingapp.data.BakingApiBuilder;
 import com.example.bakingapp.data.Recipe;
 import com.example.bakingapp.utils.Options;
+import com.example.bakingapp.utils.SimpleIdlingResource;
 import com.example.bakingapp.utils.Utils;
 
 import java.util.ArrayList;
@@ -41,11 +44,15 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.On
   
   private int mSavedPosition = NO_POSITION;
   
+  @Nullable private SimpleIdlingResource mIdlingResource; // For Espresso testing purposes.
+  
   
   @Override
   protected void onCreate (Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
+    
+    getIdlingResource(); // For Espresso testing purposes.
     
     mRecyclerView = findViewById(R.id.main_rv);
     mAdapter = new RecipesAdapter(this, this);
@@ -71,6 +78,8 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.On
    * Request recipes from network using Retrofit and handle results/errors asynchronously.
    */
   private void requestRecipes() {
+    if (mIdlingResource != null) mIdlingResource.setIdleState(false); // For Espresso testing purposes.
+    
     if (mBakingAPI == null) mBakingAPI = BakingApiBuilder.getBakingApi();
     if (mRecipesDownloadCall != null) mRecipesDownloadCall.cancel();
     mRecipesDownloadCall = BakingApiBuilder.getBakingApi().getRecipes();
@@ -86,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.On
           Log.w(TAG,String.format("onResponse() failed: %d %s", response.code(), response.message()));
           showToast(getString(R.string.bad_server_response, response.code()));
         }
+        if (mIdlingResource != null) mIdlingResource.setIdleState(true); // For Espresso testing purposes.
       }
       
       @Override
@@ -95,6 +105,7 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.On
           showToast(getString(R.string.network_error));
           Log.w(TAG, "onFailure(): " + error);
         }
+        if (mIdlingResource != null) mIdlingResource.setIdleState(true); // For Espresso testing purposes.
       }
     });
   }
@@ -169,5 +180,12 @@ public class MainActivity extends AppCompatActivity implements RecipesAdapter.On
     Intent intent = new Intent(this, RecipeActivity.class);
     intent.putExtra(RecipeActivity.EXTRA_RECIPE, recipe);
     startActivity(intent);
+  }
+  
+  
+  @VisibleForTesting
+  public IdlingResource getIdlingResource() {
+    if (mIdlingResource == null) mIdlingResource = new SimpleIdlingResource();
+    return mIdlingResource;
   }
 }

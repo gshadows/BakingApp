@@ -3,9 +3,9 @@ package com.example.bakingapp.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import lombok.Getter;
 
@@ -16,12 +16,15 @@ import lombok.Getter;
  */
 public class Recipe implements Parcelable {
 
-  @Getter private int                   id;
-  @Getter private String                name;
-  @Getter private ArrayList<Ingredient> ingredients;
-  @Getter private ArrayList<Step>       steps;
-  @Getter private int                   servings;
-  @Getter private String                image;
+  @Getter protected int                   id;
+  @Getter protected String                name;
+  @Getter protected ArrayList<Ingredient> ingredients;
+  @Getter protected ArrayList<Step>       steps;
+  @Getter protected int                   servings;
+  @Getter protected String                image;
+  
+  
+  @VisibleForTesting protected Recipe() {} // For Espresso testing only.
   
   
   protected Recipe(@NonNull Parcel in) {

@@ -3,6 +3,7 @@ package com.example.bakingapp.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
 
 import lombok.Getter;
 
@@ -13,9 +14,12 @@ import lombok.Getter;
  */
 public class Ingredient implements Parcelable {
 
-  @Getter private float   quantity;
-  @Getter private String  measure;
-  @Getter private String  ingredient;
+  @Getter protected float   quantity;
+  @Getter protected String  measure;
+  @Getter protected String  ingredient;
+  
+  
+  @VisibleForTesting protected Ingredient() {} // For Espresso testing only.
   
   
   protected Ingredient (@NonNull Parcel in) {

@@ -3,6 +3,7 @@ package com.example.bakingapp.data;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
 
 import lombok.Getter;
 
@@ -13,11 +14,14 @@ import lombok.Getter;
  */
 public class Step implements Parcelable {
 
-  @Getter private int    id;
-  @Getter private String shortDescription;
-  @Getter private String description;
-  @Getter private String videoURL;
-  @Getter private String thumbnailURL;
+  @Getter protected int    id;
+  @Getter protected String shortDescription;
+  @Getter protected String description;
+  @Getter protected String videoURL;
+  @Getter protected String thumbnailURL;
+  
+  
+  @VisibleForTesting protected Step() {} // For Espresso testing only.
   
   
   protected Step (@NonNull Parcel in) {
